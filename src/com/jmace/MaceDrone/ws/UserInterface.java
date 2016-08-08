@@ -10,7 +10,7 @@ public class UserInterface
 	@GET
 	public String sayHi()
 	{
-		return "Hi!";
+		return "Hello all!";
 	}
 	
 }
