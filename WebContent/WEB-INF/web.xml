@@ -23,6 +23,10 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
   
+  <listener>
+     <listener-class>com.jmace.MaceDrone.settings.Context</listener-class>
+  </listener>
+  
   <servlet-mapping>
     <servlet-name>Mace Drone</servlet-name>
     <url-pattern>/rest/*</url-pattern>
