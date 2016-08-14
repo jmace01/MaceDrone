@@ -3,17 +3,14 @@
 	'use strict';
 	
 	function delayKill() {
-		console.log('contacting drone');
 		$.ajax({
 		    url: './rest/status/report',
 		    type: 'post',
 		    error: function(){
 		    	$('#status').html('Cannot contact drone!');
-		    	console.log('contacting drone failed');
 		    },
 		    success: function(){
-		        $('#status').html();
-		        console.log('contacting drone successful');
+		        $('#status').html('');
 		    },
 		    timeout: 100
 		});
