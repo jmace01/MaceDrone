@@ -1,8 +1,15 @@
+$.settings = Object({
+	PING_INTERVAL_MS : 1000,
+	MAX_PING_CONNECTION_TIME_MS : 250
+});
+
+
 (function() {
 	
 	'use strict';
 	
-	function delayKill() {
+	function ping() {
+		console.log('OKAY');
 		$.ajax({
 		    url: './rest/status/report',
 		    type: 'post',
@@ -12,19 +19,20 @@
 		    success: function(){
 		        $('#status').html('');
 		    },
-		    timeout: 100
+		    timeout: $.settings.MAX_PING_CONNECTION_TIME_MS
 		});
 	}
-	setInterval(delayKill,1000);
+	
+	setInterval(ping, $.settings.PING_INTERVAL_MS);
 	
 	function move(event) {
 		$('#cursor').css('left', (event.pageX - 10) + 'px');
 		$('#cursor').css('top', (event.pageY - 20) + 'px');
 		
-		var left = (event.pageX < 200) ? (200 - event.pageX) / 200 : 0;
-		var right = (event.pageX > 200) ? (event.pageX - 200) / 200 : 0;;
-		var forward = (event.pageY < 200) ? (200 - event.pageY) / 200 : 0;;
-		var backward = (event.pageY > 200) ? (event.pageY - 200) / 200 : 0;;
+		var left = (event.pageX < 200) ? (200 - event.pageX) / 2 : 0;
+		var right = (event.pageX > 200) ? (event.pageX - 200) / 2 : 0;;
+		var forward = (event.pageY < 200) ? (200 - event.pageY) / 2 : 0;;
+		var backward = (event.pageY > 200) ? (event.pageY - 200) / 2 : 0;;
 		
 		$("#dynamicDirection").html(
 			'FW:'+forward+', BW:'+backward+', LF:'+left+', RT: '+right 
