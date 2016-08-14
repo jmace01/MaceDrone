@@ -9,7 +9,6 @@ $.settings = Object({
 	'use strict';
 	
 	function ping() {
-		console.log('OKAY');
 		$.ajax({
 		    url: './rest/status/report',
 		    type: 'post',
