@@ -24,7 +24,7 @@
   </servlet>
   
   <listener>
-     <listener-class>com.jmace.MaceDrone.settings.Context</listener-class>
+     <listener-class>com.jmace.MaceDrone.ws.context.Context</listener-class>
   </listener>
   
   <servlet-mapping>

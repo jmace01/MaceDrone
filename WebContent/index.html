@@ -5,10 +5,38 @@
 	<title>MaceDrone Controller</title>
 	<meta name="author" content="Jason Mace">
 	<link rel="stylesheet" type="text/css" href="./resources/main.css">
+	<script src="./resources/jquery-3.1.0.min.js"></script>
 </head>
 <body>
-	Hello, world!
 	<div id="status"></div>
+	
+	<div id="dynamicControls">
+		<div id="cursor"></div>
+		<div id="cursorCenter"></div>
+		<div id="dynamicDirection">FW:0, BW:0, LF:0, RT:0</div>
+	</div>
+	
+	<div id="manualDirections">
+		<div id="controlForward" class="arrowKey">&#10148;</div>
+		<div id="controlBackward" class="arrowKey">&#10148;</div>
+		<div id="controlLeft" class="arrowKey">&#10148;</div>
+		<div id="controlRight" class="arrowKey">&#10148;</div>
+	</div>
+	<div id="manualElevation">
+		<div id="controlAscend" class="arrowKey">&#10148;</div>
+		<div id="controlDescend" class="arrowKey">&#10148;</div>
+	</div>
+	
+	<div class="clear"></div>
+	
+	<div id="gps">
+		<input type="text" id="long" placeholder="Long" />
+		<input type="text" id="lat" placeholder="Lat" />
+		<input type="button" id="go" value="Go" />
+	</div>
+	
+	<div id="kill">KILL ENGINES</div>
+	
 	<script type="text/javascript" src="./resources/main.js"></script>
 </body>
 	</html>

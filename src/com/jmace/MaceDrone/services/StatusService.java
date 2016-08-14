@@ -1,5 +1,6 @@
 package com.jmace.MaceDrone.services;
 
+import com.jmace.MaceDrone.settings.Settings;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -21,8 +22,8 @@ public class StatusService {
 		}
 		
 		Date date = new Date();
-		Timestamp threeSecondsAgo = new Timestamp(date.getTime() - 3000);
-		return StatusService.lastReport.before(threeSecondsAgo);
+		Timestamp cutOfftime = new Timestamp(date.getTime() - Settings.STALENESS_TIME_MILLISECONDS);
+		return StatusService.lastReport.before(cutOfftime);
 	}
 	
 }

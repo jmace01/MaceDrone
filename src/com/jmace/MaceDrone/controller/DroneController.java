@@ -50,6 +50,6 @@ public class DroneController
 	
 	public void killEngines()
 	{
-		System.out.println("KILL");
+		System.out.println("KILLING MOTORS");
 	}
 }
