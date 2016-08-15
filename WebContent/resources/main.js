@@ -24,40 +24,69 @@ $.settings = Object({
 	
 	setInterval(ping, $.settings.PING_INTERVAL_MS);
 	
-	function move(event) {
-		$('#cursor').css('left', (event.pageX - 10) + 'px');
-		$('#cursor').css('top', (event.pageY - 20) + 'px');
+	
+	function move(pageX, pageY) {
+		if (!_isDragging) {
+			return;
+		}
 		
-		var left = (event.pageX < 200) ? (200 - event.pageX) / 2 : 0;
-		var right = (event.pageX > 200) ? (event.pageX - 200) / 2 : 0;;
-		var forward = (event.pageY < 200) ? (200 - event.pageY) / 2 : 0;;
-		var backward = (event.pageY > 200) ? (event.pageY - 200) / 2 : 0;;
+		$('#cursor').css('left', (pageX - 10) + 'px');
+		$('#cursor').css('top', (pageY - 20) + 'px');
+		
+		var left = (pageX < 200) ? (200 - pageX) / 2 : 0;
+		var right = (pageX > 200) ? (pageX - 200) / 2 : 0;;
+		var forward = (pageY < 200) ? (200 - pageY) / 2 : 0;;
+		var backward = (pageY > 200) ? (pageY - 200) / 2 : 0;;
 		
 		$("#dynamicDirection").html(
 			'FW:'+forward+', BW:'+backward+', LF:'+left+', RT: '+right 
 		);
 	}
 	
-	var _isDragging = false;
-	$('#dynamicControls').mousedown(function(event) {
-		event.preventDefault();
+	function moveStart(xPos, yPos) {
 		_isDragging = true;
-		move(event);
-	});
+		move(xPos, yPos);
+	}
 	
-	$('body').mouseup(function() {
-		event.preventDefault();
+	function moveEnd() {
 		_isDragging = false;
 		$('#cursor').css('left', '50%');
 		$('#cursor').css('top', '50%');
 		$("#dynamicDirection").html('FW:0, BW:0, LF:0, RT:0');
+	}
+	
+	var _isDragging = false;
+	$('#dynamicControls').mousedown(function(event) {
+		var xPos = event.pageX;
+		var yPos = event.pageY;
+		moveStart(xPos, yPos)
 	});
 	
+	$('body').mouseup(function(event) { moveEnd(); });
+	
 	$('#dynamicControls').mousemove(function(event) {
+		var xPos = event.pageX;
+		var yPos = event.pageY;
+		move(xPos, yPos);
+	});
+	
+	$(document).on('touchstart', '#dynamicControls', function(event) {
 		event.preventDefault();
-		if (_isDragging) {
-			move(event);
-		}
+		var xPos = event.originalEvent.touches[0].pageX;
+		var yPos = event.originalEvent.touches[0].pageY;
+		moveStart(xPos, yPos);
+	});
+	
+	$(document).on('touchmove', '#dynamicControls', function(event) {
+		event.preventDefault();
+		var xPos = event.originalEvent.touches[0].pageX;
+		var yPos = event.originalEvent.touches[0].pageY;
+		move(xPos, yPos);
+	});
+	
+	$(document).on('touchend', '#dynamicControls', function(event) {
+		event.preventDefault();
+		moveEnd();
 	});
 	
 })();

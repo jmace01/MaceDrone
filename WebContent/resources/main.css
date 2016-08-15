@@ -1,9 +1,13 @@
 #status {
+    position: absolute;
+    top: 0px;
+    left: 0px;
 	background: red;
 	margin-bottom: 20px;
 	color: #FFF;
 	width: 270px;
 	text-align: center;
+	font-size: 28px;
 }
 
 .clear {
@@ -12,6 +16,7 @@
 
 
 #dynamicControls {
+    margin-top: 40px;
 	width: 400px;
 	height: 400px;
 	border: 1px solid #000;
