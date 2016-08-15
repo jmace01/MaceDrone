@@ -16,7 +16,9 @@ public class CheckingService extends Thread {
 			while (true) {
 				Thread.sleep(Settings.STALENESS_TIME_MILLISECONDS);
 				if (StatusService.reportIsStale()) {
-					controller.killEngines();
+					controller.killMotors();
+				} else {
+					controller.wakeMotors();
 				}
 			}
 		} catch (InterruptedException ex) {}

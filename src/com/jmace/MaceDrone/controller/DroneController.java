@@ -3,11 +3,13 @@ package com.jmace.MaceDrone.controller;
 public class DroneController
 {
 
+	private static boolean isKilled;
 	private static DroneController instance;
 	
 	
 	static
 	{
+		isKilled = false;
 		instance = new DroneController();
 	}
 	
@@ -24,32 +26,41 @@ public class DroneController
 	}
 	
 	
-	public void moveForward()
+	public void moveForward(float rate)
 	{
-		System.out.println("UP");
+		System.out.println("UP " + rate);
 	}
 	
 	
-	public void moveBackward()
+	public void moveBackward(float rate)
 	{
-		System.out.println("DOWN");
+		System.out.println("DOWN " + rate);
 	}
 	
 	
-	public void moveLeft()
+	public void moveLeft(float rate)
 	{
-		System.out.println("LEFT");
+		System.out.println("LEFT " + rate);
 	}
 	
 	
-	public void moveRight()
+	public void moveRight(float rate)
 	{
-		System.out.println("RIGHT");
+		System.out.println("RIGHT " + rate);
 	}
 	
 	
-	public void killEngines()
+	public void killMotors()
 	{
-		System.out.println("KILLING MOTORS");
+		if (!isKilled) {
+			System.out.println("KILLING MOTORS");
+		}
+	}
+	
+	public void wakeMotors()
+	{
+		if (isKilled) {
+			System.out.println("WAKING MOTORS");
+		}
 	}
 }

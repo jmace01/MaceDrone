@@ -40,11 +40,13 @@ $.settings = Object({
 	
 	var _isDragging = false;
 	$('#dynamicControls').mousedown(function(event) {
+		event.preventDefault();
 		_isDragging = true;
 		move(event);
 	});
 	
 	$('body').mouseup(function() {
+		event.preventDefault();
 		_isDragging = false;
 		$('#cursor').css('left', '50%');
 		$('#cursor').css('top', '50%');
@@ -52,6 +54,7 @@ $.settings = Object({
 	});
 	
 	$('#dynamicControls').mousemove(function(event) {
+		event.preventDefault();
 		if (_isDragging) {
 			move(event);
 		}
