@@ -54,6 +54,7 @@ public class DroneController
 	{
 		if (!isKilled) {
 			System.out.println("KILLING MOTORS");
+			isKilled = true;
 		}
 	}
 	
@@ -61,6 +62,7 @@ public class DroneController
 	{
 		if (isKilled) {
 			System.out.println("WAKING MOTORS");
+			isKilled = false;
 		}
 	}
 }
