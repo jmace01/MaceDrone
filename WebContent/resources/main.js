@@ -12,11 +12,13 @@ $.settings = Object({
 		$.ajax({
 		    url: './rest/status/report',
 		    type: 'post',
+		    dataType: 'json',
 		    error: function(){
 		    	$('#status').html('Cannot contact drone!');
 		    },
-		    success: function(){
+		    success: function(data){
 		        $('#status').html('');
+		        $('#sysinfo').html('Temp: '+data['temp']);
 		    },
 		    timeout: $.settings.MAX_PING_CONNECTION_TIME_MS
 		});
@@ -30,16 +32,20 @@ $.settings = Object({
 			return;
 		}
 		
-		$('#cursor').css('left', (pageX - 10) + 'px');
-		$('#cursor').css('top', (pageY - 20) + 'px');
+		var dynamicControlsPos = $('#dynamicControls').offset();
+		var x = pageX - dynamicControlsPos.left;
+		var y = pageY - dynamicControlsPos.top;
 		
-		var left = (pageX < 200) ? (200 - pageX) / 2 : 0;
-		var right = (pageX > 200) ? (pageX - 200) / 2 : 0;;
-		var forward = (pageY < 200) ? (200 - pageY) / 2 : 0;;
-		var backward = (pageY > 200) ? (pageY - 200) / 2 : 0;;
+		$('#cursor').css('left', (x - 0) + 'px');
+		$('#cursor').css('top', (y - 0) + 'px');
+		
+		var left = (x < 200) ? (200 - x) / 2 : 0;
+		var right = (x > 200) ? (x - 200) / 2 : 0;;
+		var forward = (y < 200) ? (200 - y) / 2 : 0;;
+		var backward = (y > 200) ? (y - 200) / 2 : 0;;
 		
 		$("#dynamicDirection").html(
-			'FW:'+forward+', BW:'+backward+', LF:'+left+', RT: '+right 
+			'FW:'+forward+', BW:'+backward+', LF:'+left+', RT:'+right 
 		);
 	}
 	

@@ -3,16 +3,13 @@ package com.jmace.MaceDrone.ws.rest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-
-import org.apache.log4j.Logger;
-
 import com.jmace.MaceDrone.controller.DroneController;
 import com.jmace.MaceDrone.gps.PiGPS;
 
 @Path("Control")
 public class Controls {
 
-	private static Logger log = Logger.getLogger(Controls.class);
+	//private static Logger log = Logger.getLogger(Controls.class);
 	private static PiGPS gps;
 	private static DroneController controller;
 
