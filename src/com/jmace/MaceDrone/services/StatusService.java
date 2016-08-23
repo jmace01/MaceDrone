@@ -44,6 +44,7 @@ public class StatusService {
 			float cel = SystemInfo.getCpuTemperature();
 			return cel * (9/5) + 32;
 		} catch (Throwable ex) {
+			System.out.println(ex.getMessage());
 			return 0;
 		}
 	}
