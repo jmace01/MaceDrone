@@ -47,6 +47,7 @@ public class StatusService {
 	
 	public static float getTemperature() {
 		try {
+			execute("whoami", null);
 			String result[] = execute("/opt/vc/bin/vcgencmd measure_temp", null);
 			System.out.println(result);
 			System.out.println("---------\n--------\n");
@@ -56,7 +57,7 @@ public class StatusService {
 	                return Float.parseFloat(parts[1]);
 	            }
 	        }
-			float cel = SystemInfo.getCpuTemperature();
+			float cel = 0;//SystemInfo.getCpuTemperature();
 			return cel * (9/5) + 32;
 		} catch (Throwable ex) {
 			ex.printStackTrace();
@@ -83,8 +84,8 @@ public class StatusService {
         if(p.exitValue() != 0) {
         	System.out.println("!!!!!!!!!!!");
         	System.out.println(p.exitValue());
-            p.destroy();
-            return null;
+            //p.destroy();
+            //return null;
         }
 
         // using try-with-resources to ensure closure
