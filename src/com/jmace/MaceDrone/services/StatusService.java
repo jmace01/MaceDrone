@@ -43,9 +43,10 @@ public class StatusService {
 	public static float getTemperature() {
 		try {
 			String result[] = ExecUtil.execute("/opt/vc/bin/vcgencmd measure_temp");
+			System.out.println(result);
+			System.out.println("---------\n--------\n");
 	        if(result != null && result.length > 0){
 	            for(String line : result) {
-	            	System.out.println(line);
 	                String parts[] = line.split("[=']", 3);
 	                return Float.parseFloat(parts[1]);
 	            }
