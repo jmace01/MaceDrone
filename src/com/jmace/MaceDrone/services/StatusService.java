@@ -7,9 +7,14 @@ import com.pi4j.platform.PlatformManager;
 import com.pi4j.system.SystemInfo;
 import com.pi4j.util.ExecUtil;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StatusService {
@@ -42,7 +47,7 @@ public class StatusService {
 	
 	public static float getTemperature() {
 		try {
-			String result[] = ExecUtil.execute("/opt/vc/bin/vcgencmd measure_temp");
+			String result[] = execute("/opt/vc/bin/vcgencmd measure_temp", null);
 			System.out.println(result);
 			System.out.println("---------\n--------\n");
 	        if(result != null && result.length > 0){
@@ -58,5 +63,65 @@ public class StatusService {
 			return 0;
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	public static String[] execute(String command, String split) throws IOException, InterruptedException {
+        List<String> result = new ArrayList<>();
+
+        // create external process
+        Process p = Runtime.getRuntime().exec(command);
+
+        // wait for external process to complete
+        p.waitFor();
+
+        // if the external proess returns an error code (non-zero), then build out and return null
+        if(p.exitValue() != 0) {
+        	System.out.println("!!!!!!!!!!!");
+        	System.out.println(p.exitValue());
+            p.destroy();
+            return null;
+        }
+
+        // using try-with-resources to ensure closure
+        try(InputStreamReader isr = new InputStreamReader(p.getInputStream());
+            BufferedReader reader = new BufferedReader(isr)) {
+            // read lines from buffered reader
+            String line = reader.readLine();
+            while (line != null) {
+                if (!line.isEmpty()) {
+                    if (split == null || split.isEmpty()) {
+                        result.add(line.trim());
+                    } else {
+                        String[] parts = line.trim().split(split);
+                        for(String part : parts) {
+                            if (part != null && !part.isEmpty()) {
+                                result.add(part.trim());
+                            }
+                        }
+                    }
+                }
+
+                // read next line
+                line = reader.readLine();
+            }
+        }
+
+        // destroy process
+        p.destroy();
+
+        System.out.println(result + "++++++++++++++++");
+        
+        // return result
+        if (result.size() > 0) {
+            return result.toArray(new String[result.size()]);
+        } else {
+            return new String[0];
+        }
+    }
 	
 }
