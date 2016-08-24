@@ -5,6 +5,7 @@ import com.pi4j.platform.Platform;
 import com.pi4j.platform.PlatformAlreadyAssignedException;
 import com.pi4j.platform.PlatformManager;
 import com.pi4j.system.SystemInfo;
+import com.pi4j.util.ExecUtil;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -41,6 +42,14 @@ public class StatusService {
 	
 	public static float getTemperature() {
 		try {
+			String result[] = ExecUtil.execute("/opt/vc/bin/vcgencmd measure_temp");
+	        if(result != null && result.length > 0){
+	            for(String line : result) {
+	            	System.out.println(line);
+	                String parts[] = line.split("[=']", 3);
+	                return Float.parseFloat(parts[1]);
+	            }
+	        }
 			float cel = SystemInfo.getCpuTemperature();
 			return cel * (9/5) + 32;
 		} catch (Throwable ex) {
