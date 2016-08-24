@@ -1,6 +1,8 @@
 package com.jmace.MaceDrone.services;
 
 import com.jmace.MaceDrone.settings.Settings;
+import com.pi4j.system.SystemInfo;
+
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,7 +38,7 @@ public class StatusService {
 	
 	public static float getTemperature() {
 		try {
-			float cel = 0;//SystemInfo.getCpuTemperature();
+			float cel = SystemInfo.getCpuTemperature();
 			return cel * (9/5) + 32;
 		} catch (Throwable ex) {
 			return 0;
