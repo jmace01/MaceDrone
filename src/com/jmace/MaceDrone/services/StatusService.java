@@ -39,7 +39,7 @@ public class StatusService {
 	public static float getTemperature() {
 		try {
 			float cel = SystemInfo.getCpuTemperature();
-			return cel * (9/5) + 32;
+			return (float) ((cel * 9.0) / 5.0 + 32);
 		} catch (Throwable ex) {
 			return 0;
 		}
