@@ -1,6 +1,7 @@
 package com.jmace.MaceDrone.ws.rest;
 
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import com.jmace.MaceDrone.controller.DroneController;
@@ -53,7 +54,7 @@ public class Controls {
 		return "OK";
 	}
 	
-	@POST
+	@GET
 	@Path("Test")
 	public String test() {
 		controller.test();
