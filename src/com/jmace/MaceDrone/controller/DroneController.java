@@ -1,10 +1,16 @@
 package com.jmace.MaceDrone.controller;
 
+import com.jmace.MaceDrone.msp.MultiWiiClient;
+import com.jmace.MaceDrone.msp.MultiWiiRequest;
+
 public class DroneController
 {
 
 	private static boolean isKilled;
 	private static DroneController instance;
+	private static MultiWiiClient mwClient;
+	
+	private static final String SERIAL_PORT = "/dev/ttyUSB0";
 	
 	
 	static
@@ -16,7 +22,7 @@ public class DroneController
 	
 	private DroneController()
 	{
-		//
+		this.mwClient = new MultiWiiClient(SERIAL_PORT);
 	}
 	
 	
@@ -64,5 +70,10 @@ public class DroneController
 			System.out.println("WAKING MOTORS");
 			isKilled = false;
 		}
+	}
+	
+	public void test()
+	{
+		this.mwClient.sendRequest(MultiWiiRequest.MSP_ALTITUDE);
 	}
 }
