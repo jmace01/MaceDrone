@@ -8,7 +8,7 @@ public class DroneController
 
 	private static boolean isKilled;
 	private static DroneController instance;
-	private static MultiWiiClient mwClient;
+	private MultiWiiClient mwClient;
 	
 	private static final String SERIAL_PORT = "/dev/ttyUSB0";
 	

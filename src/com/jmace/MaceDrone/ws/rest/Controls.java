@@ -52,5 +52,12 @@ public class Controls {
 		controller.killMotors();
 		return "OK";
 	}
+	
+	@POST
+	@Path("Test")
+	public String test() {
+		controller.test();
+		return "OKAY";
+	}
 
 }
