@@ -112,7 +112,7 @@ public class MultiWiiClient {
         serial.write(message.getBytes());
         serial.flush();
         
-        while (!serial.getCTS()) {
+        while (!serial.getDSR()) {
         	try{
         		Thread.sleep(100);
         	} catch (Exception e) {}
