@@ -7,8 +7,6 @@ import com.pi4j.io.serial.FlowControl;
 import com.pi4j.io.serial.Parity;
 import com.pi4j.io.serial.Serial;
 import com.pi4j.io.serial.SerialConfig;
-import com.pi4j.io.serial.SerialDataEvent;
-import com.pi4j.io.serial.SerialDataEventListener;
 import com.pi4j.io.serial.SerialFactory;
 import com.pi4j.io.serial.StopBits;
 import java.io.IOException;
@@ -27,27 +25,14 @@ public class MultiWiiClient {
 	
 	public MultiWiiClient(String usbPort) {
 		SerialConfig config = new SerialConfig();
-
-        config.device(usbPort)
+		config.device(usbPort)
               .baud(Baud._38400)
               .dataBits(DataBits._8)
               .parity(Parity.NONE)
               .stopBits(StopBits._1)
               .flowControl(FlowControl.NONE);
 		
-		
 		this.serial = SerialFactory.createInstance();
-		serial.addListener(new SerialDataEventListener() {
-            @Override
-            public void dataReceived(SerialDataEvent event) {
-                try {
-                    System.out.println(event.getAsciiString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-		
 		try {
 			this.serial.open(config);
 		} catch (Exception e) {
@@ -56,15 +41,15 @@ public class MultiWiiClient {
 	}
 	
 	
-	public void sendRequest(MultiWiiRequest request) {
+	public String sendRequest(MultiWiiRequest request) throws IllegalStateException, IOException {
 		String message = createMessage(request.getId(), false, null);
-		sendMessage(message);
+		return sendMessage(message);
 	}
 	
 	
-	public void sendCommand(MultiWiiCommand command, String payload) {
+	public String sendCommand(MultiWiiCommand command, String payload) throws IllegalStateException, IOException {
 		String message = createMessage(command.getId(), true, payload);
-		sendMessage(message);
+		return sendMessage(message);
 	}
 	
 	/**
@@ -127,13 +112,17 @@ public class MultiWiiClient {
 	}
 	
 	
-	private void sendMessage(String message) {
-        try {
-            serial.write(message.getBytes());
+	private String sendMessage(String message) throws IllegalStateException, IOException {
+        serial.write(message.getBytes());
+        
+        serial.flush();
+        
+        StringBuilder returnMessage = new StringBuilder();
+        while (serial.available() != 0) {
+        	returnMessage.append(serial.read());
         }
-        catch(Exception ex){
-            ex.printStackTrace();
-        }
+        
+        return returnMessage.toString();
 	}
 	
 }

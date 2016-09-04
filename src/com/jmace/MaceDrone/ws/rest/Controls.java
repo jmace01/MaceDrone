@@ -1,5 +1,7 @@
 package com.jmace.MaceDrone.ws.rest;
 
+import java.io.IOException;
+
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -56,7 +58,7 @@ public class Controls {
 	
 	@GET
 	@Path("Test")
-	public String test() {
+	public String test() throws IllegalStateException, IOException {
 		controller.test();
 		return "OKAY";
 	}

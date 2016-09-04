@@ -1,5 +1,7 @@
 package com.jmace.MaceDrone.controller;
 
+import java.io.IOException;
+
 import com.jmace.MaceDrone.msp.MultiWiiClient;
 import com.jmace.MaceDrone.msp.MultiWiiRequest;
 
@@ -72,7 +74,7 @@ public class DroneController
 		}
 	}
 	
-	public void test()
+	public void test() throws IllegalStateException, IOException
 	{
 		this.mwClient.sendRequest(MultiWiiRequest.MSP_ALTITUDE);
 	}
