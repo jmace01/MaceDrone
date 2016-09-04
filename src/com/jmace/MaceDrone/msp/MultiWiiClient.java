@@ -106,9 +106,9 @@ public class MultiWiiClient {
 		
 		//Get the direction of the message
 		if (isCommand) {
-			message.append(TO_MUTLIWII);
-		} else {
 			message.append(FROM_MUTLIWII);
+		} else {
+			message.append(TO_MUTLIWII);
 		}
 		
 		char datalength = (char) ((payload != null) ? payload.length() : 0);
