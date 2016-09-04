@@ -114,11 +114,11 @@ public class MultiWiiClient {
         
         int count = 0;
         while (serial.available() == 0) {
-        	if (count++ > 15) {
+        	if (count++ > 150) {
         		break;
         	}
         	try{
-        		Thread.sleep(100);
+        		Thread.sleep(10);
         	} catch (Exception e) {}
         }
         
