@@ -24,7 +24,7 @@ public class MultiWiiClient {
 	//Character that denotes information being passed to the MultiWii
 	private static final char TO_MUTLIWII = '<';
 	//Character that denotes information being requested from by the MultiWii
-	private static final char FROM_MUTLIWII = '>';
+	private static final char FROM_MUTLIWII = '<';
 	
 	public MultiWiiClient(String usbPort) {
 		SerialConfig config = new SerialConfig();
