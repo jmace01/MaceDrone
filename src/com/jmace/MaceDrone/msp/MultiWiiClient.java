@@ -7,8 +7,6 @@ import com.pi4j.io.serial.FlowControl;
 import com.pi4j.io.serial.Parity;
 import com.pi4j.io.serial.Serial;
 import com.pi4j.io.serial.SerialConfig;
-import com.pi4j.io.serial.SerialDataEvent;
-import com.pi4j.io.serial.SerialDataEventListener;
 import com.pi4j.io.serial.SerialFactory;
 import com.pi4j.io.serial.StopBits;
 import java.io.IOException;
@@ -18,9 +16,9 @@ public class MultiWiiClient {
 
 	private final Serial serial;
 	
-	//The preamble is defined by the protocol.
-	//Every message must begin with the characters $M and the direction <
-	private static final String PREAMBLE = "$M<";
+	//The preamble and direction byte of messages are both defined by the protocol.
+	//Every message must begin with the characters $M, and message going to the MultiWii must have the direction <
+	private static final String PREAMBLE_WITH_DIRECTION = "$M<";
 	
 	public MultiWiiClient(String usbPort) {
 		SerialConfig config = new SerialConfig();
@@ -43,10 +41,6 @@ public class MultiWiiClient {
 	
 	public String sendRequest(MultiWiiRequest request) throws IllegalStateException, IOException {
 		String message = createMessage(request.getId(), false, null);
-		//////////////////////////////////////////////////////////////////////////////////
-		System.out.println(message);
-		System.out.println(String.format("%040x", new BigInteger(1, message.getBytes())));
-		//////////////////////////////////////////////////////////////////////////////////
 		return sendMessage(message);
 	}
 	
@@ -85,7 +79,7 @@ public class MultiWiiClient {
 	 * 		Calculated with an XOR of the size, command, and each byte of data 
 	 */
 	private String createMessage(int mutliWiiCommandnumber, boolean isCommand, String payload) {
-		StringBuilder message = new StringBuilder(PREAMBLE);
+		StringBuilder message = new StringBuilder(PREAMBLE_WITH_DIRECTION);
 		byte checksum=0;
 		
 		int datalength = (payload != null) ? payload.length() : 0;
@@ -108,12 +102,19 @@ public class MultiWiiClient {
 	}
 	
 	
-	private String sendMessage(String message) throws IllegalStateException, IOException {
-        serial.write(message.getBytes());
+	private synchronized String sendMessage(String message) throws IllegalStateException, IOException {
+        //Clear out any old responses or requests that were not handled
+		serial.discardAll();
+		
+		//Send the request
+		serial.write(message.getBytes());
         serial.flush();
         
+        //Wait for the response to come back
+        //(Note that, in the event of an error, serial.available() == -1 and will skip both loops)
         int count = 0;
         while (serial.available() == 0) {
+        	//After 1.5 seconds, give up on the response
         	if (count++ > 150) {
         		break;
         	}
@@ -122,11 +123,13 @@ public class MultiWiiClient {
         	} catch (Exception e) {}
         }
         
+        //Get the response
         StringBuilder response = new StringBuilder();
         while (serial.available() != 0) {
-        	response.append(serial.read());
+        	response.append(new String(serial.read()));
         }
         
+        //Return the response
         return response.toString();
 	}
 	
