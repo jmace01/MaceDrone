@@ -76,6 +76,6 @@ public class DroneController
 	
 	public String test() throws IllegalStateException, IOException
 	{
-		return this.mwClient.sendRequest(MultiWiiRequest.MSP_ALTITUDE);
+		return this.mwClient.sendRequest(MultiWiiRequest.MSP_IDENT);
 	}
 }
