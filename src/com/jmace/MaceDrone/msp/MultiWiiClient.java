@@ -29,7 +29,7 @@ public class MultiWiiClient {
 	public MultiWiiClient(String usbPort) {
 		SerialConfig config = new SerialConfig();
 		config.device(usbPort)
-              .baud(Baud._38400)
+              .baud(Baud._115200)
               .dataBits(DataBits._8)
               .parity(Parity.NONE)
               .stopBits(StopBits._1)
