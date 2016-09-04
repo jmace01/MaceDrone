@@ -137,12 +137,7 @@ public class MultiWiiClient {
         serial.flush();
         System.out.println("TESTING ------------------");
         
-        StringBuilder returnMessage = new StringBuilder();
-        while (serial.available() != 0) {
-        	returnMessage.append(serial.read());
-        }
-        
-        return returnMessage.toString();
+        return "";
 	}
 	
 }
