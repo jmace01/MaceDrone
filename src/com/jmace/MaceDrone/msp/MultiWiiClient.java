@@ -116,16 +116,9 @@ public class MultiWiiClient {
         serial.write(message.getBytes());
         
         serial.flush();
+        System.out.println("TESTING ------------------");
         
-        String msg = "";
-        while (!serial.getCTS()) {
-        	msg += "waiting ";
-        	try{
-        		Thread.sleep(1000l);
-        	} catch (Exception e) {}
-        }
-        
-        StringBuilder returnMessage = new StringBuilder(msg);
+        StringBuilder returnMessage = new StringBuilder();
         while (serial.available() != 0) {
         	returnMessage.append(serial.read());
         }
