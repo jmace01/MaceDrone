@@ -107,11 +107,10 @@ public class MultiWiiClient {
 			message.append(FROM_MUTLIWII);
 		}
 		
-		int datalength = (payload != null) ? payload.length() : 0;
-		byte payloadSize = (byte) (datalength & 0xFF);
+		char datalength = (char) ((payload != null) ? payload.length() : 0);
 		
-		message.append((char) payloadSize);
-		checksum ^= (payloadSize & 0xFF);
+		message.append(datalength);
+		checksum ^= datalength;
 		
 		message.append((char) mutliWiiCommandnumber);
 		checksum ^= (mutliWiiCommandnumber);
