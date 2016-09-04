@@ -59,8 +59,7 @@ public class Controls {
 	@GET
 	@Path("Test")
 	public String test() throws IllegalStateException, IOException {
-		controller.test();
-		return "OKAY";
+		return "OKAY" + controller.test();
 	}
 
 }
