@@ -110,20 +110,20 @@ public class MultiWiiClient {
 		int datalength = (payload != null) ? payload.length() : 0;
 		byte payloadSize = (byte) (datalength & 0xFF);
 		
-		message.append(payloadSize);
+		message.append((char) payloadSize);
 		checksum ^= (payloadSize & 0xFF);
 		
-		message.append((byte) (mutliWiiCommandnumber & 0xFF));
-		checksum ^= (mutliWiiCommandnumber & 0xFF);
+		message.append((char) mutliWiiCommandnumber);
+		checksum ^= (mutliWiiCommandnumber);
 		
 		if (payload != null) {
 			for (char c : payload.toCharArray()){ 
-				message.append((byte)(c & 0xFF));
-				checksum ^= (c & 0xFF);
+				message.append(c);
+				checksum ^= c;
 			}
 		}
 		
-		message.append(checksum);
+		message.append((char) checksum);
 		return message.toString();
 	}
 	
