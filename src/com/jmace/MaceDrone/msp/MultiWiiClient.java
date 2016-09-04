@@ -12,6 +12,7 @@ import com.pi4j.io.serial.SerialDataEventListener;
 import com.pi4j.io.serial.SerialFactory;
 import com.pi4j.io.serial.StopBits;
 import java.io.IOException;
+import java.math.BigInteger;
 
 public class MultiWiiClient {
 
@@ -58,7 +59,10 @@ public class MultiWiiClient {
 	
 	public String sendRequest(MultiWiiRequest request) throws IllegalStateException, IOException {
 		String message = createMessage(request.getId(), false, null);
+		//////////////////////////////////////////////////////////////////////////////////
 		System.out.println(message);
+		System.out.println(String.format("%040x", new BigInteger(1, message.getBytes())));
+		//////////////////////////////////////////////////////////////////////////////////
 		return sendMessage(message);
 	}
 	
