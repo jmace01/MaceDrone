@@ -19,12 +19,8 @@ public class MultiWiiClient {
 	private final Serial serial;
 	
 	//The preamble is defined by the protocol.
-	//Every message must begin with the characters $M
-	private static final String PREAMBLE = "$M";
-	//Character that denotes information being passed to the MultiWii
-	private static final char TO_MUTLIWII = '<';
-	//Character that denotes information being requested from by the MultiWii
-	private static final char FROM_MUTLIWII = '<';
+	//Every message must begin with the characters $M and the direction <
+	private static final String PREAMBLE = "$M<";
 	
 	public MultiWiiClient(String usbPort) {
 		SerialConfig config = new SerialConfig();
@@ -36,18 +32,6 @@ public class MultiWiiClient {
               .flowControl(FlowControl.NONE);
 		
 		this.serial = SerialFactory.createInstance();
-		
-		serial.addListener(new SerialDataEventListener() {
-            @Override
-            public void dataReceived(SerialDataEvent event) {
-                try {
-                    System.out.println("[HEX DATA]   " + event.getHexByteString());
-                    System.out.println("[ASCII DATA] " + event.getAsciiString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 		
 		try {
 			this.serial.open(config);
@@ -85,7 +69,7 @@ public class MultiWiiClient {
 	 * 
 	 * Direction (1 byte):
 	 * 		Either '<' for a command going to the MultiWii or '>' for
-	 * 		information being requested from the MultiWii
+	 * 		information being coming back from the MultiWii
 	 * 
 	 * Size (1 byte):
 	 * 		The number of bytes in the payload
@@ -103,13 +87,6 @@ public class MultiWiiClient {
 	private String createMessage(int mutliWiiCommandnumber, boolean isCommand, String payload) {
 		StringBuilder message = new StringBuilder(PREAMBLE);
 		byte checksum=0;
-		
-		//Get the direction of the message
-		if (isCommand) {
-			message.append(TO_MUTLIWII);
-		} else {
-			message.append(FROM_MUTLIWII);
-		}
 		
 		int datalength = (payload != null) ? payload.length() : 0;
 		
@@ -133,11 +110,15 @@ public class MultiWiiClient {
 	
 	private String sendMessage(String message) throws IllegalStateException, IOException {
         serial.write(message.getBytes());
-        
         serial.flush();
-        System.out.println("TESTING ------------------");
         
-        return "";
+        StringBuilder response = new StringBuilder();
+        while (serial.available() != 0)
+        {
+        	response.append(serial.read());
+        }
+        
+        return response.toString();
 	}
 	
 }
