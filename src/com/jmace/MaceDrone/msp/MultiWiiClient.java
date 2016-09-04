@@ -7,6 +7,8 @@ import com.pi4j.io.serial.FlowControl;
 import com.pi4j.io.serial.Parity;
 import com.pi4j.io.serial.Serial;
 import com.pi4j.io.serial.SerialConfig;
+import com.pi4j.io.serial.SerialDataEvent;
+import com.pi4j.io.serial.SerialDataEventListener;
 import com.pi4j.io.serial.SerialFactory;
 import com.pi4j.io.serial.StopBits;
 import java.io.IOException;
@@ -33,6 +35,19 @@ public class MultiWiiClient {
               .flowControl(FlowControl.NONE);
 		
 		this.serial = SerialFactory.createInstance();
+		
+		serial.addListener(new SerialDataEventListener() {
+            @Override
+            public void dataReceived(SerialDataEvent event) {
+                try {
+                    System.out.println("[HEX DATA]   " + event.getHexByteString());
+                    System.out.println("[ASCII DATA] " + event.getAsciiString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+		
 		try {
 			this.serial.open(config);
 		} catch (Exception e) {
@@ -43,6 +58,7 @@ public class MultiWiiClient {
 	
 	public String sendRequest(MultiWiiRequest request) throws IllegalStateException, IOException {
 		String message = createMessage(request.getId(), false, null);
+		System.out.println(message);
 		return sendMessage(message);
 	}
 	
