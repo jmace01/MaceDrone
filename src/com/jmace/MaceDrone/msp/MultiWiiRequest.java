@@ -3,11 +3,12 @@ package com.jmace.MaceDrone.msp;
 import java.util.Map;
 
 import com.jmace.MaceDrone.msp.parsers.MSPEmptyParser;
+import com.jmace.MaceDrone.msp.parsers.MSPIdentParser;
 import com.jmace.MaceDrone.msp.parsers.MSPParser;
 
 public enum MultiWiiRequest {
 
-	MSP_IDENT(100, MSPEmptyParser.getInstance()),
+	MSP_IDENT(100, MSPIdentParser.getInstance()),
 	MSP_STATUS(101, MSPEmptyParser.getInstance()),
 	MSP_RAW_IMU(102, MSPEmptyParser.getInstance()),
 	MSP_SERVO(103, MSPEmptyParser.getInstance()),
