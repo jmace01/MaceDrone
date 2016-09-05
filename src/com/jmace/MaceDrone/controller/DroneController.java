@@ -1,6 +1,7 @@
 package com.jmace.MaceDrone.controller;
 
 import java.io.IOException;
+import java.util.Map;
 
 import com.jmace.MaceDrone.msp.MultiWiiClient;
 import com.jmace.MaceDrone.msp.MultiWiiRequest;
@@ -74,7 +75,7 @@ public class DroneController
 		}
 	}
 	
-	public String test() throws IllegalStateException, IOException
+	public Map<String, String> test() throws IllegalStateException, IOException
 	{
 		return this.mwClient.sendRequest(MultiWiiRequest.MSP_IDENT);
 	}

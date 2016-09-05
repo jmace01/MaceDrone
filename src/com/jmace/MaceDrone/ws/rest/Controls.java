@@ -6,18 +6,18 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jmace.MaceDrone.controller.DroneController;
-import com.jmace.MaceDrone.gps.PiGPS;
 
 @Path("Control")
 public class Controls {
 
 	//private static Logger log = Logger.getLogger(Controls.class);
-	private static PiGPS gps;
 	private static DroneController controller;
 
 	static {
-		gps = PiGPS.getInstance();
 		controller = DroneController.getInstance();
 	}
 
@@ -59,7 +59,9 @@ public class Controls {
 	@GET
 	@Path("Test")
 	public String test() throws IllegalStateException, IOException {
-		return "OK : " + controller.test();
+		GsonBuilder gb = new GsonBuilder();
+		Gson gson = gb.serializeNulls().create();
+		return "OK : " + gson.toJson(controller.test());
 	}
 
 }

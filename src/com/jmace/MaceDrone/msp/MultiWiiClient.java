@@ -10,7 +10,7 @@ import com.pi4j.io.serial.SerialConfig;
 import com.pi4j.io.serial.SerialFactory;
 import com.pi4j.io.serial.StopBits;
 import java.io.IOException;
-import java.math.BigInteger;
+import java.util.Map;
 
 public class MultiWiiClient {
 
@@ -39,15 +39,17 @@ public class MultiWiiClient {
 	}
 	
 	
-	public String sendRequest(MultiWiiRequest request) throws IllegalStateException, IOException {
+	public Map<String, String> sendRequest(MultiWiiRequest request) throws IllegalStateException, IOException {
 		String message = createMessage(request.getId(), false, null);
-		return sendMessage(message);
+		String response = sendMessage(message); 
+		return request.parse(response);
 	}
 	
 	
-	public String sendCommand(MultiWiiCommand command, String payload) throws IllegalStateException, IOException {
+	public Map<String, String> sendCommand(MultiWiiCommand command, String payload) throws IllegalStateException, IOException {
 		String message = createMessage(command.getId(), true, payload);
-		return sendMessage(message);
+		String response = sendMessage(message) ;
+		return command.parse(response);
 	}
 	
 	/**
