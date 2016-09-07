@@ -30,7 +30,7 @@ public class MSPIdentParser implements MSPParser {
 		
 		results.put("hex", String.format("%040x", new BigInteger(1, response)));
 		
-		results.put("version", Integer.toString((int) response[0])); 
+		results.put("version", Integer.toString(response[0] & 0xFF)); 
 		results.put("multi type", Integer.toString((int) response[1])); 
 		results.put("msp version", Integer.toString((int) response[2])); 
 		
