@@ -137,6 +137,7 @@ public class MultiWiiClient {
         
         if (!responseHeader.toString().equals("$M>") || inStream.available() <= 0)
         {
+        	System.out.println("Invalid header: " + responseHeader.toString());
         	return new byte[0];
         }
         

@@ -24,6 +24,7 @@ public class MSPIdentParser implements MSPParser {
 		Map<String, String> results = new HashMap<>();
 		
 		if (response.length < 7) {
+			System.out.println("Invalid dataset " + new String(response));
 			return results;
 		}
 		
