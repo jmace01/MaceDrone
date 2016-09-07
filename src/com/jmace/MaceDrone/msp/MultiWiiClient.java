@@ -111,13 +111,14 @@ public class MultiWiiClient {
 	private synchronized byte[] sendMessage(String message) throws IllegalStateException, IOException {
         //Clear out any old responses or requests that were not handled
 		serial.discardAll();
+		inStream.reset();
 		
 		//Send the request
 		serial.write(message.getBytes());
         serial.flush();
         
         //Wait for the response to come back
-        //(Note that, in the event of an error, serial.available() == -1 and will skip both loops)
+        //(Note that, in the event of an error, inStream.available() == -1 and will skip both loops)
         int count = 0;
         while (inStream.available() == 0) {
         	//After 1.5 seconds, give up on the response
@@ -131,7 +132,7 @@ public class MultiWiiClient {
         
         //Get the response
         StringBuilder responseHeader = new StringBuilder();
-        for (int i = 0; i < 3 && inStream.available() != 0; i++) {
+        for (int i = 0; i < 3 && inStream.available() > 0; i++) {
         	responseHeader.append(inStream.read());
         }
         
