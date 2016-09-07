@@ -132,7 +132,7 @@ public class MultiWiiClient {
         //Get the response
         StringBuilder responseHeader = new StringBuilder();
         for (int i = 0; i < 3; i++) {
-        	responseHeader.append(inStream.read());
+        	responseHeader.append((char) inStream.read());
         }
         
         if (!responseHeader.toString().equals("$M>"))
