@@ -132,18 +132,17 @@ public class MultiWiiClient {
         
         //Get the response
         StringBuilder responseHeader = new StringBuilder();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3 && inStream.available() > 0; i++) {
         	responseHeader.append((char) inStream.read());
         }
         
-        if (!responseHeader.toString().equals("$M>"))
+        if (!responseHeader.toString().equals("$M>") || inStream.available() <= 0)
         {
         	System.out.println("Invalid header: " + responseHeader.toString());
         	return new byte[0];
         }
         
         int length = inStream.read();
-        System.out.println("Reading " + length);
         byte[] response = new byte[length];
         
         for (int i = 0; i < length && inStream.available() > 0; i++) {
