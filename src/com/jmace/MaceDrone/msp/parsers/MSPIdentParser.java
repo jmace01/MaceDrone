@@ -31,8 +31,8 @@ public class MSPIdentParser implements MSPParser {
 		results.put("hex", String.format("%040x", new BigInteger(1, response)));
 		
 		results.put("version", Integer.toString(response[0] & 0xFF)); 
-		results.put("multi type", Integer.toString((int) response[1])); 
-		results.put("msp version", Integer.toString((int) response[2])); 
+		results.put("multi type", Integer.toString(response[1] & 0xFF)); 
+		results.put("msp version", Integer.toString(response[2] & 0xFF)); 
 		
 		int capability = (response[3] & 0xff) + ((response[4] & 0xff) << 8) + ((response[5] & 0xff) << 16) + ((response[6] & 0xff) << 24); 
 		
