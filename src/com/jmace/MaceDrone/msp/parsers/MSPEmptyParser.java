@@ -19,7 +19,7 @@ public class MSPEmptyParser implements MSPParser {
 	}
 	
 	@Override
-	public Map<String, String> parser(String reponse) {
+	public Map<String, String> parser(byte[] reponse) {
 		return new HashMap<>();
 	}
 

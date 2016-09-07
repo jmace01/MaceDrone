@@ -9,12 +9,14 @@ import com.pi4j.io.serial.Serial;
 import com.pi4j.io.serial.SerialConfig;
 import com.pi4j.io.serial.SerialFactory;
 import com.pi4j.io.serial.StopBits;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Map;
 
 public class MultiWiiClient {
 
 	private final Serial serial;
+	private final BufferedInputStream inStream;
 	
 	//The preamble and direction byte of messages are both defined by the protocol.
 	//Every message must begin with the characters $M, and message going to the MultiWii must have the direction <
@@ -36,19 +38,21 @@ public class MultiWiiClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		this.inStream = new BufferedInputStream(this.serial.getInputStream());
 	}
 	
 	
 	public Map<String, String> sendRequest(MultiWiiRequest request) throws IllegalStateException, IOException {
 		String message = createMessage(request.getId(), false, null);
-		String response = sendMessage(message); 
+		byte[] response = sendMessage(message); 
 		return request.parse(response);
 	}
 	
 	
 	public Map<String, String> sendCommand(MultiWiiCommand command, String payload) throws IllegalStateException, IOException {
 		String message = createMessage(command.getId(), true, payload);
-		String response = sendMessage(message) ;
+		byte[] response = sendMessage(message);
 		return command.parse(response);
 	}
 	
@@ -104,7 +108,7 @@ public class MultiWiiClient {
 	}
 	
 	
-	private synchronized String sendMessage(String message) throws IllegalStateException, IOException {
+	private synchronized byte[] sendMessage(String message) throws IllegalStateException, IOException {
         //Clear out any old responses or requests that were not handled
 		serial.discardAll();
 		
@@ -115,7 +119,7 @@ public class MultiWiiClient {
         //Wait for the response to come back
         //(Note that, in the event of an error, serial.available() == -1 and will skip both loops)
         int count = 0;
-        while (serial.available() == 0) {
+        while (inStream.available() == 0) {
         	//After 1.5 seconds, give up on the response
         	if (count++ > 150) {
         		break;
@@ -126,13 +130,25 @@ public class MultiWiiClient {
         }
         
         //Get the response
-        StringBuilder response = new StringBuilder();
-        while (serial.available() != 0) {
-        	response.append(new String(serial.read()));
+        StringBuilder responseHeader = new StringBuilder();
+        for (int i = 0; i < 3 && inStream.available() != 0; i++) {
+        	responseHeader.append(inStream.read());
+        }
+        
+        if (!responseHeader.toString().equals("$M>") || inStream.available() <= 0)
+        {
+        	return new byte[0];
+        }
+        
+        int length = inStream.read();
+        byte[] response = new byte[length];
+        
+        for (int i = 0; i < length && inStream.available() > 0; i++) {
+        	response[i] = (byte) inStream.read();
         }
         
         //Return the response
-        return response.toString();
+        return response;
 	}
 	
 }

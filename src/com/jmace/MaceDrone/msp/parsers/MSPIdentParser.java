@@ -20,17 +20,20 @@ public class MSPIdentParser implements MSPParser {
 	}
 	
 	@Override
-	public Map<String, String> parser(String response) {
+	public Map<String, String> parser(byte[] response) {
 		Map<String, String> results = new HashMap<>();
-		char resp[] = response.toCharArray();
 		
-		results.put("hex", String.format("%040x", new BigInteger(1, response.getBytes())));
+		if (response.length < 7) {
+			return results;
+		}
 		
-		results.put("version", Integer.toString((int) resp[4])); 
-		results.put("multi type", Integer.toString((int) resp[5])); 
-		results.put("msp version", Integer.toString((int) resp[6])); 
+		results.put("hex", String.format("%040x", new BigInteger(1, response)));
 		
-		int capability = (resp[7] & 0xff) + ((resp[8] & 0xff) << 8) + ((resp[9] & 0xff) << 16) + ((resp[10] & 0xff) << 24); 
+		results.put("version", Integer.toString((int) response[0])); 
+		results.put("multi type", Integer.toString((int) response[1])); 
+		results.put("msp version", Integer.toString((int) response[2])); 
+		
+		int capability = (response[3] & 0xff) + ((response[4] & 0xff) << 8) + ((response[5] & 0xff) << 16) + ((response[6] & 0xff) << 24); 
 		
 		results.put("rxbind", ((capability & 1) > 0) ? "true" :  "false");
 		results.put("motors", ((capability & 4) > 0) ? "true" :  "false");

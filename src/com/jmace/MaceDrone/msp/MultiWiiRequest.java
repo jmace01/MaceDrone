@@ -40,7 +40,7 @@ public enum MultiWiiRequest {
 		return this.id;
 	}
 	
-	public Map<String, String> parse(String response) {
+	public Map<String, String> parse(byte[] response) {
 		return parser.parser(response);
 	}
 	
