@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.jmace.MaceDrone.msp.MSPMultiType;
+
 public class MSPIdentParser implements MSPParser {
 	
 	private static MSPIdentParser instance;
@@ -31,7 +33,7 @@ public class MSPIdentParser implements MSPParser {
 		results.put("hex", String.format("%040x", new BigInteger(1, response)));
 		
 		results.put("version", Double.toString((response[0] & 0xFF) / 100.0)); 
-		results.put("multi type", Integer.toString(response[1] & 0xFF)); 
+		results.put("multi type", MSPMultiType.getFromID(response[1] & 0xFF).name()); 
 		results.put("msp version", Integer.toString(response[2] & 0xFF)); 
 		
 		int capability = (response[3] & 0xFF) | ((response[4] & 0xFF) << 8) | ((response[5] & 0xFF) << 16) | ((response[6] & 0xFF) << 24); 
