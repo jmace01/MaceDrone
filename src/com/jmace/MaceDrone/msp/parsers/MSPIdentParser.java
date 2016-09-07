@@ -34,7 +34,7 @@ public class MSPIdentParser implements MSPParser {
 		results.put("multi type", Integer.toString(response[1] & 0xFF)); 
 		results.put("msp version", Integer.toString(response[2] & 0xFF)); 
 		
-		int capability = (response[3] & 0xff) + ((response[4] & 0xff) << 8) + ((response[5] & 0xff) << 16) + ((response[6] & 0xff) << 24); 
+		int capability = (response[3] & 0xFF) | ((response[4] & 0xFF) << 8) | ((response[5] & 0xFF) << 16) | ((response[6] & 0xFF) << 24); 
 		
 		results.put("rxbind", ((capability & 1) > 0) ? "true" :  "false");
 		results.put("motors", ((capability & 4) > 0) ? "true" :  "false");
