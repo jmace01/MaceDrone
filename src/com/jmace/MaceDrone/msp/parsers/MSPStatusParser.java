@@ -38,7 +38,7 @@ public class MSPStatusParser implements MSPParser {
 		results.put("GPSActive",helper.bitIsSet(sensor, 4));
 		results.put("sonarActive",helper.bitIsSet(sensor, 5));
 		results.put("mode", helper.read32BitInt());
-		results.put("conf", helper.read32BitInt());
+		results.put("conf", helper.read8BitInt());
 		
 		return results;
 	}
