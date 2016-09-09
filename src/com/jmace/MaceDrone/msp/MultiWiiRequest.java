@@ -5,11 +5,12 @@ import java.util.Map;
 import com.jmace.MaceDrone.msp.parsers.MSPEmptyParser;
 import com.jmace.MaceDrone.msp.parsers.MSPIdentParser;
 import com.jmace.MaceDrone.msp.parsers.MSPParser;
+import com.jmace.MaceDrone.msp.parsers.MSPStatusParser;
 
 public enum MultiWiiRequest {
 
 	MSP_IDENT(100, MSPIdentParser.getInstance()),
-	MSP_STATUS(101, MSPEmptyParser.getInstance()),
+	MSP_STATUS(101, MSPStatusParser.getInstance()),
 	MSP_RAW_IMU(102, MSPEmptyParser.getInstance()),
 	MSP_SERVO(103, MSPEmptyParser.getInstance()),
 	MSP_MOTOR(104, MSPEmptyParser.getInstance()),

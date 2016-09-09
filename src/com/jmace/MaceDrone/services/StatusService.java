@@ -1,5 +1,8 @@
 package com.jmace.MaceDrone.services;
 
+import com.jmace.MaceDrone.msp.MultiWiiClient;
+import com.jmace.MaceDrone.msp.MultiWiiClientFactory;
+import com.jmace.MaceDrone.msp.MultiWiiRequest;
 import com.jmace.MaceDrone.settings.Settings;
 import com.pi4j.system.SystemInfo;
 
@@ -11,15 +14,21 @@ import java.util.Map;
 public class StatusService {
 
 	private static Timestamp lastReport;
+	private static MultiWiiClient client;
 	
 	public static void setReportTimestamp() {
 		StatusService.lastReport = new Timestamp(new Date().getTime());
+		client = MultiWiiClientFactory.getInstance();
 	}
 	
 	public static Map<String, String> getReport() {
-		Map<String, String> report = new HashMap<>();
-		report.put("temp", Float.toString(getTemperature()));
-		return report;
+		try {
+			Map<String, String> report = client.sendRequest(MultiWiiRequest.MSP_STATUS);
+			report.put("temp", Float.toString(getTemperature()));
+			return report;
+		} catch (Exception e) {
+			return new HashMap<>();
+		}
 	}
 	
 	public static Timestamp getLastReportTime() {

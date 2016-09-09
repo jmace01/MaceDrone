@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.jmace.MaceDrone.msp.MultiWiiClient;
+import com.jmace.MaceDrone.msp.MultiWiiClientFactory;
 import com.jmace.MaceDrone.msp.MultiWiiRequest;
 
 public class DroneController
@@ -12,9 +13,6 @@ public class DroneController
 	private static boolean isKilled;
 	private static DroneController instance;
 	private MultiWiiClient mwClient;
-	
-	private static final String SERIAL_PORT = "/dev/ttyUSB0";
-	
 	
 	static
 	{
@@ -25,7 +23,7 @@ public class DroneController
 	
 	private DroneController()
 	{
-		this.mwClient = new MultiWiiClient(SERIAL_PORT);
+		this.mwClient = MultiWiiClientFactory.getInstance();
 	}
 	
 	

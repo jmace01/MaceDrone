@@ -4,6 +4,6 @@ import java.util.Map;
 
 public interface MSPParser {
 	
-	public Map<String, String> parser(byte[] response);
+	public Map<String, Object> parser(byte[] response);
 	
 }
