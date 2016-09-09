@@ -1,6 +1,5 @@
 package com.jmace.MaceDrone.msp.parsers;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +31,7 @@ public class MSPIdentParser implements MSPParser {
 		
 		ParserHelper helper = new ParserHelper(response);
 		
-		results.put("hex", String.format("%040x", new BigInteger(1, response)));
+		//results.put("hex", String.format("%040x", new BigInteger(1, response)));
 		
 		results.put("version", helper.read8BitInt() / 100.0); 
 		results.put("multi type", MSPMultiType.getFromID(helper.read8BitInt()).name()); 

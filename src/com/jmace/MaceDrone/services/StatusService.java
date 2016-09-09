@@ -5,7 +5,6 @@ import com.jmace.MaceDrone.msp.MultiWiiClientFactory;
 import com.jmace.MaceDrone.msp.MultiWiiRequest;
 import com.jmace.MaceDrone.settings.Settings;
 import com.pi4j.system.SystemInfo;
-
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;

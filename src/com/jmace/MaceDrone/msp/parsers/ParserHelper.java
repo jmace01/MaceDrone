@@ -33,7 +33,7 @@ public class ParserHelper {
 	
 	
 	public boolean bitIsSet(int binary, int bitNumber) {
-		return (binary & (1 << bitNumber)) > 0;
+		return (binary & (1 << (bitNumber - 1))) > 0;
 	}
 	
 }
