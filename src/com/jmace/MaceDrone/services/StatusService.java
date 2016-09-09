@@ -26,6 +26,7 @@ public class StatusService {
 			report.put("temp", Float.toString(getTemperature()));
 			return report;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new HashMap<>();
 		}
 	}
