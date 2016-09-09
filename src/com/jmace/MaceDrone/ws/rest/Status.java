@@ -16,7 +16,7 @@ public class Status {
 	@POST
 	public String report() {
 		StatusService.setReportTimestamp();
-		Map<String, String> report = StatusService.getReport();
+		Map<String, Object> report = StatusService.getReport();
 		
 		GsonBuilder gb = new GsonBuilder();
 		Gson gson = gb.serializeNulls().create();

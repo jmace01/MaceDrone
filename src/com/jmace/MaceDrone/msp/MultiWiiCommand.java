@@ -33,7 +33,7 @@ public enum MultiWiiCommand {
 		return this.id;
 	}
 	
-	public Map<String, String> parse(byte[] response) {
+	public Map<String, Object> parse(byte[] response) {
 		return parser.parser(response);
 	}
 	

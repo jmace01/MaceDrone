@@ -21,9 +21,9 @@ public class StatusService {
 		client = MultiWiiClientFactory.getInstance();
 	}
 	
-	public static Map<String, String> getReport() {
+	public static Map<String, Object> getReport() {
 		try {
-			Map<String, String> report = client.sendRequest(MultiWiiRequest.MSP_STATUS);
+			Map<String, Object> report = client.sendRequest(MultiWiiRequest.MSP_STATUS);
 			report.put("temp", Float.toString(getTemperature()));
 			return report;
 		} catch (Exception e) {

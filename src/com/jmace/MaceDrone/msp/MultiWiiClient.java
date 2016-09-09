@@ -43,14 +43,14 @@ public class MultiWiiClient {
 	}
 	
 	
-	public Map<String, String> sendRequest(MultiWiiRequest request) throws IllegalStateException, IOException {
+	public Map<String, Object> sendRequest(MultiWiiRequest request) throws IllegalStateException, IOException {
 		String message = createMessage(request.getId(), false, null);
 		byte[] response = sendMessage(message); 
 		return request.parse(response);
 	}
 	
 	
-	public Map<String, String> sendCommand(MultiWiiCommand command, String payload) throws IllegalStateException, IOException {
+	public Map<String, Object> sendCommand(MultiWiiCommand command, String payload) throws IllegalStateException, IOException {
 		String message = createMessage(command.getId(), true, payload);
 		byte[] response = sendMessage(message);
 		return command.parse(response);

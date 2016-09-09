@@ -73,7 +73,7 @@ public class DroneController
 		}
 	}
 	
-	public Map<String, String> test() throws IllegalStateException, IOException
+	public Map<String, Object> test() throws IllegalStateException, IOException
 	{
 		return this.mwClient.sendRequest(MultiWiiRequest.MSP_IDENT);
 	}
