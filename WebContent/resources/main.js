@@ -14,17 +14,27 @@ $.settings = Object({
 		    type: 'get',
 		    dataType: 'json',
 		    error: function(){
+		    	$('#status').show();
 		    	$('#status').html('Cannot contact drone!');
 		    },
 		    success: function(data){
-		        $('#status').html('');
-		        $('#sysinfo').html('Temp: '+data['temp']);
+		    	$('#status').hide();
+		        $('#temp').html('Temp: '+data['temp']);
 		    },
 		    timeout: $.settings.MAX_PING_CONNECTION_TIME_MS
 		});
 	}
 	
 	setInterval(ping, $.settings.PING_INTERVAL_MS);
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	function move(pageX, pageY) {

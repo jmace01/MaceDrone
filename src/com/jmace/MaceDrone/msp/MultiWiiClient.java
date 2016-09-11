@@ -1,3 +1,33 @@
+/**
+ * This class controls communication with the MultiWii via the MultiWii serial
+ * protocol (MSP).
+ * 
+ * Message format is as follows:
+ * +--------+---------+----+-------+----+---+
+ * |preamble|direction|size|command|data|crc|
+ * +--------+---------+----+-------+----+---+
+ * 
+ * Preamble (2 bytes):
+ * 		Marks the start of a new message; always "$M"
+ * 
+ * Direction (1 byte):
+ * 		Either '<' for a command going to the MultiWii or '>' for
+ * 		information being coming back from the MultiWii
+ * 
+ * Size (1 byte):
+ * 		The number of bytes in the payload
+ * 
+ * Command (1 byte):
+ * 		The message ID of the command, as defined in the protocol
+ * 		100's for requesting data, and 200's for requesting an action
+ * 
+ * Data (variable bytes):
+ * 		The data to pass along with the command
+ * 
+ * CRC (1 byte):
+ * 		Calculated with an XOR of the size, command, and each byte of data 
+ */
+
 package com.jmace.MaceDrone.msp;
 
 
@@ -15,31 +45,34 @@ import java.util.Map;
 
 public class MultiWiiClient {
 
-	private final Serial serial;
-	private final BufferedInputStream inStream;
+	private Serial serial;
+	private BufferedInputStream inStream;
+	
 	
 	//The preamble and direction byte of messages are both defined by the protocol.
 	//Every message must begin with the characters $M, and message going to the MultiWii must have the direction <
-	private static final String PREAMBLE_WITH_DIRECTION = "$M<";
+	private static final String OUTGOING_PREAMBLE_WITH_DIRECTION = "$M<";
+	//Every response must begin with the characters $M, and message coming from the MultiWii must have the direction >
+	private static final String INCOMING_PREAMBLE_WITH_DIRECTION = "$M>";
+	
 	
 	public MultiWiiClient(String usbPort) {
-		SerialConfig config = new SerialConfig();
-		config.device(usbPort)
-              .baud(Baud._115200)
-              .dataBits(DataBits._8)
-              .parity(Parity.NONE)
-              .stopBits(StopBits._1)
-              .flowControl(FlowControl.NONE);
-		
-		this.serial = SerialFactory.createInstance();
-		
 		try {
+			SerialConfig config = new SerialConfig();
+			config.device(usbPort)
+	              .baud(Baud._115200)
+	              .dataBits(DataBits._8)
+	              .parity(Parity.NONE)
+	              .stopBits(StopBits._1)
+	              .flowControl(FlowControl.NONE);
+			
+			this.serial = SerialFactory.createInstance();
 			this.serial.open(config);
-		} catch (Exception e) {
+			
+			this.inStream = new BufferedInputStream(this.serial.getInputStream());
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		
-		this.inStream = new BufferedInputStream(this.serial.getInputStream());
 	}
 	
 	
@@ -58,34 +91,9 @@ public class MultiWiiClient {
 	
 	/**
 	 * This method creates the message that will be sent to the MultiWii
-	 * 
-	 * Message format is as follows:
-	 * +--------+---------+----+-------+----+---+
-	 * |preamble|direction|size|command|data|crc|
-	 * +--------+---------+----+-------+----+---+
-	 * 
-	 * Preamble (2 bytes):
-	 * 		Marks the start of a new message; always "$M"
-	 * 
-	 * Direction (1 byte):
-	 * 		Either '<' for a command going to the MultiWii or '>' for
-	 * 		information being coming back from the MultiWii
-	 * 
-	 * Size (1 byte):
-	 * 		The number of bytes in the payload
-	 * 
-	 * Command (1 byte):
-	 * 		The message ID of the command, as defined in the protocol
-	 * 		100's for requesting data, and 200's for requesting an action
-	 * 
-	 * Data (variable bytes):
-	 * 		The data to pass along with the command
-	 * 
-	 * CRC (1 byte):
-	 * 		Calculated with an XOR of the size, command, and each byte of data 
 	 */
 	private String createMessage(int mutliWiiCommandnumber, boolean isCommand, String payload) {
-		StringBuilder message = new StringBuilder(PREAMBLE_WITH_DIRECTION);
+		StringBuilder message = new StringBuilder(OUTGOING_PREAMBLE_WITH_DIRECTION);
 		byte checksum=0;
 		
 		int datalength = (payload != null) ? payload.length() : 0;
@@ -108,6 +116,9 @@ public class MultiWiiClient {
 	}
 	
 	
+	/**
+	 * This method sends the request and receives the response.
+	 */
 	private synchronized byte[] sendMessage(String message) throws IllegalStateException, IOException {
         //Clear out any old responses or requests that were not handled
 		serial.discardAll();
@@ -136,7 +147,7 @@ public class MultiWiiClient {
         	responseHeader.append((char) inStream.read());
         }
         
-        if (!responseHeader.toString().equals("$M>") || inStream.available() <= 1)
+        if (!responseHeader.toString().equals(INCOMING_PREAMBLE_WITH_DIRECTION) || inStream.available() <= 1)
         {
         	System.out.println("Invalid header: " + responseHeader.toString());
         	return new byte[0];
@@ -155,6 +166,7 @@ public class MultiWiiClient {
         int checksum = inStream.read();
         
         if (computedChecksum != checksum) {
+        	System.out.println("Invalid checksum");
         	return new byte[0];
         }
         
