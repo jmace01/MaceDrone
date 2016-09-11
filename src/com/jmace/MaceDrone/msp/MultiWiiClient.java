@@ -143,7 +143,7 @@ public class MultiWiiClient {
         }
         
         int length = inStream.read();
-        int computedChecksum = inStream.read(); //command
+        int computedChecksum = length ^ inStream.read(); //command
         byte[] response = new byte[length];
         
         for (int i = 0; i < length && inStream.available() > 0; i++) {
@@ -155,7 +155,7 @@ public class MultiWiiClient {
         int checksum = inStream.read();
         
         if (computedChecksum != checksum) {
-        	//return new byte[0];
+        	return new byte[0];
         }
         
         //Return the response
