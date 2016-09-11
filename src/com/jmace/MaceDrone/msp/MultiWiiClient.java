@@ -155,7 +155,7 @@ public class MultiWiiClient {
         int checksum = inStream.read();
         
         if (computedChecksum != checksum) {
-        	return new byte[0];
+        	//return new byte[0];
         }
         
         //Return the response
