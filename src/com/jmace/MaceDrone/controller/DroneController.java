@@ -1,18 +1,14 @@
 package com.jmace.MaceDrone.controller;
 
-import java.io.IOException;
-import java.util.Map;
-
 import com.jmace.MaceDrone.msp.MultiWiiClient;
 import com.jmace.MaceDrone.msp.MultiWiiClientFactory;
-import com.jmace.MaceDrone.msp.MultiWiiRequest;
 
 public class DroneController
 {
-
 	private static boolean isKilled;
 	private static DroneController instance;
 	private MultiWiiClient mwClient;
+	
 	
 	static
 	{
@@ -65,16 +61,12 @@ public class DroneController
 		}
 	}
 	
+	
 	public void wakeMotors()
 	{
 		if (isKilled) {
 			System.out.println("WAKING MOTORS");
 			isKilled = false;
 		}
-	}
-	
-	public Map<String, Object> test() throws IllegalStateException, IOException
-	{
-		return this.mwClient.sendRequest(MultiWiiRequest.MSP_IDENT);
 	}
 }

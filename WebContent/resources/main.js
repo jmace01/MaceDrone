@@ -11,7 +11,7 @@ $.settings = Object({
 	function ping() {
 		$.ajax({
 		    url: './rest/status/report',
-		    type: 'post',
+		    type: 'get',
 		    dataType: 'json',
 		    error: function(){
 		    	$('#status').html('Cannot contact drone!');

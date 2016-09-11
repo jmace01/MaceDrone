@@ -5,6 +5,7 @@ import java.util.Map;
 import com.jmace.MaceDrone.msp.parsers.MSPEmptyParser;
 import com.jmace.MaceDrone.msp.parsers.MSPIdentParser;
 import com.jmace.MaceDrone.msp.parsers.MSPParser;
+import com.jmace.MaceDrone.msp.parsers.MSPRawGPSParser;
 import com.jmace.MaceDrone.msp.parsers.MSPStatusParser;
 
 public enum MultiWiiRequest {
@@ -15,7 +16,7 @@ public enum MultiWiiRequest {
 	MSP_SERVO(103, MSPEmptyParser.getInstance()),
 	MSP_MOTOR(104, MSPEmptyParser.getInstance()),
 	MSP_RC(105, MSPEmptyParser.getInstance()),
-	MSP_RAW_GPS(106, MSPEmptyParser.getInstance()),
+	MSP_RAW_GPS(106, MSPRawGPSParser.getInstance()),
 	MSP_COMP_GPS(107, MSPEmptyParser.getInstance()),
 	MSP_ATTITUDE(108, MSPEmptyParser.getInstance()),
 	MSP_ALTITUDE(109, MSPEmptyParser.getInstance()),
