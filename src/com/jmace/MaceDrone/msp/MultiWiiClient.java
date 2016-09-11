@@ -147,8 +147,9 @@ public class MultiWiiClient {
         byte[] response = new byte[length];
         
         for (int i = 0; i < length && inStream.available() > 0; i++) {
-        	response[i] = (byte) inStream.read();
-        	computedChecksum ^= (int) response[i];
+        	int value =  inStream.read();
+        	response[i] = (byte) value;
+        	computedChecksum ^= value;
         }
         
         int checksum = inStream.read();
