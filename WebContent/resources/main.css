@@ -1,4 +1,4 @@
-html, body {
+html, body, #main {
     margin: 0px;
     padding: 0px;
     width: 100%;
@@ -57,4 +57,37 @@ html, body {
     text-align: center;
     background-color: red;
     color: #FFF;
+}
+
+#turnMessage {
+    display: none;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+
+#turnMessage div {
+    margin: auto;
+}
+
+#turnMessage img {
+    width: 100px;
+}
+
+#sidewaysPhone {
+    position: relative;
+    left: -30px;
+    top: 20px;
+    transform: rotate(90deg);
+}
+
+
+@media screen and (max-width: 400px) {
+    #main {
+        display: none !important;
+    }
+    #turnMessage {
+        display: block !important;
+    }
 }
