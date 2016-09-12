@@ -8,6 +8,8 @@ $.settings = Object({
 	
 	'use strict';
 	
+	document.documentElement.requestFullscreen();
+	
 	function ping() {
 		$.ajax({
 		    url: './rest/status/report',
