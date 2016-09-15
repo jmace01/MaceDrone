@@ -5,6 +5,8 @@ import com.jmace.MaceDrone.msp.MultiWiiClientFactory;
 import com.jmace.MaceDrone.msp.MultiWiiRequest;
 import com.jmace.MaceDrone.settings.Settings;
 import com.pi4j.system.SystemInfo;
+
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,5 +54,14 @@ public class StatusService {
 		} catch (Throwable ex) {
 			return 0;
 		}
-	}	
+	}
+	
+	public static Map<String, Object> getGPS() {
+		try {
+			return client.sendRequest(MultiWiiRequest.MSP_RAW_GPS);
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+			return new HashMap<>();
+		}
+	}
 }
