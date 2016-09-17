@@ -31,7 +31,7 @@ $.settings = Object({
 		    timeout: $.settings.MAX_PING_CONNECTION_TIME_MS
 		});
 	}
-	//setInterval(ping, $.settings.PING_INTERVAL_MS);
+	setInterval(ping, $.settings.PING_INTERVAL_MS);
 	
 	
 	function moveStart(id, posX, posY, isLeft) {
