@@ -8,6 +8,13 @@ $.settings = Object({
 	
 	'use strict';
 	
+	var _draggingLeft  = false;
+	var _draggingRight = false;
+	var _startX1         = 0;
+	var _startY1         = 0;
+	var _startX2         = 0;
+	var _startY2         = 0;
+	
 	function ping() {
 		$.ajax({
 		    url: './rest/status/report',
@@ -24,85 +31,87 @@ $.settings = Object({
 		    timeout: $.settings.MAX_PING_CONNECTION_TIME_MS
 		});
 	}
-	
-	setInterval(ping, $.settings.PING_INTERVAL_MS);
-	
+	//setInterval(ping, $.settings.PING_INTERVAL_MS);
 	
 	
+	function moveStart(id, posX, posY, isLeft) {
+		if (isLeft) {
+			if (_draggingLeft) return;
+			var ring       = '#leftRing';
+			_startX1       = posX;
+			_startY1       = posY;
+			_draggingLeft  = id;
+		} else {
+			if (_draggingRight) return;
+			var ring       = '#rightRing';
+			_startX2       = posX;
+			_startY2       = posY;
+			_draggingRight = id;
+		}
+		$(ring).css('left', (posX - 45) + 'px');
+		$(ring).css('top', (posY - 45) + 'px');
+		$(ring).show();
+	}
 	
+	function move(posX, posY, isLeft) {
+		if (isLeft) {
+			if (!_draggingLeft) return;
+			var ring = '#leftRing';
+		} else {
+			if (!_draggingRight) return;
+			var ring = '#rightRing';
+		}
+		
+		$(ring).css('left', (posX - 45) + 'px');
+		$(ring).css('top', (posY - 45) + 'px');
+	}
 	
+	function moveEnd(isLeft) {
+		if (isLeft) {
+			_draggingLeft  = false;
+			var ring         = '#leftRing';
+		} else {
+			_draggingRight = false;
+			var ring         = '#rightRing';
+		}
+		$(ring).hide();
+	}
 	
+	$(document).on('touchstart', 'body', function(event) {
+		event.preventDefault();
+		
+		var touch = event.changedTouches[0];
+		
+		var xPos = touch.pageX;
+		var yPos = touch.pageY;
+		moveStart(touch.identifier, xPos, yPos, (event.target.id == 'controlsLeft'));
+	});
 	
+	$(document).on('touchmove', 'body', function(event) {
+		event.preventDefault();
+		
+		var touches = event.changedTouches;
+		for (var i = 0; i < touches.length; i++) {
+			var xPos = touches[i].pageX;
+			var yPos = touches[i].pageY;
+			if (touches[i].identifier === _draggingLeft) {
+				move(xPos, yPos, true);
+			} else if (touches[i].identifier === _draggingRight) {
+				move(xPos, yPos, false);
+			}
+		}
+	});
 	
-	
-	
-	
-	function move(pageX, pageY) {
-		if (!_isDragging) {
+	$(document).on('touchend', 'body', function(event) {
+		event.preventDefault();
+		
+		var touch = event.changedTouches[0];
+		if (touch.identifier != _draggingLeft && touch.identifier != _draggingRight) {
 			return;
 		}
 		
-		var dynamicControlsPos = $('#dynamicControls').offset();
-		var x = pageX - dynamicControlsPos.left;
-		var y = pageY - dynamicControlsPos.top;
-		
-		$('#cursor').css('left', (x - 0) + 'px');
-		$('#cursor').css('top', (y - 0) + 'px');
-		
-		var left = (x < 200) ? (200 - x) / 2 : 0;
-		var right = (x > 200) ? (x - 200) / 2 : 0;;
-		var forward = (y < 200) ? (200 - y) / 2 : 0;;
-		var backward = (y > 200) ? (y - 200) / 2 : 0;;
-		
-		$("#dynamicDirection").html(
-			'FW:'+forward+', BW:'+backward+', LF:'+left+', RT:'+right 
-		);
-	}
-	
-	function moveStart(xPos, yPos) {
-		_isDragging = true;
-		move(xPos, yPos);
-	}
-	
-	function moveEnd() {
-		_isDragging = false;
-		$('#cursor').css('left', '50%');
-		$('#cursor').css('top', '50%');
-		$("#dynamicDirection").html('FW:0, BW:0, LF:0, RT:0');
-	}
-	
-	var _isDragging = false;
-	$('#dynamicControls').mousedown(function(event) {
-		var xPos = event.pageX;
-		var yPos = event.pageY;
-		moveStart(xPos, yPos)
+		var isLeft = (touch.identifier == _draggingLeft);
+		moveEnd(isLeft);
 	});
-	
-	$('body').mouseup(function(event) { moveEnd(); });
-	
-	$('#dynamicControls').mousemove(function(event) {
-		var xPos = event.pageX;
-		var yPos = event.pageY;
-		move(xPos, yPos);
-	});
-	
-	$(document).on('touchstart', '#dynamicControls', function(event) {
-		event.preventDefault();
-		var xPos = event.originalEvent.touches[0].pageX;
-		var yPos = event.originalEvent.touches[0].pageY;
-		moveStart(xPos, yPos);
-	});
-	
-	$(document).on('touchmove', '#dynamicControls', function(event) {
-		event.preventDefault();
-		var xPos = event.originalEvent.touches[0].pageX;
-		var yPos = event.originalEvent.touches[0].pageY;
-		move(xPos, yPos);
-	});
-	
-	$(document).on('touchend', '#dynamicControls', function(event) {
-		event.preventDefault();
-		moveEnd();
-	});
-	
+
 })();

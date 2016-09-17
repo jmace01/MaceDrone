@@ -23,13 +23,4 @@ public class Status {
 		return gson.toJson(report);
 	}
 	
-	@Path("gps")
-	@GET
-	public String gsp() {
-		GsonBuilder gb = new GsonBuilder();
-		Gson gson = gb.serializeNulls().create();
-		
-		return gson.toJson(StatusService.getGPS());
-	}
-	
 }

@@ -6,7 +6,7 @@ import javax.ws.rs.Path;
 import com.jmace.MaceDrone.controller.DroneController;
 
 
-@Path("Control")
+@Path("control")
 public class Controls {
 
 	//private static Logger log = Logger.getLogger(Controls.class);

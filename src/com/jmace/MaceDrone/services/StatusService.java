@@ -17,9 +17,12 @@ public class StatusService {
 	private static Timestamp lastReport;
 	private static MultiWiiClient client;
 	
+	static {
+		client = MultiWiiClientFactory.getInstance();
+	}
+	
 	public static void setReportTimestamp() {
 		StatusService.lastReport = new Timestamp(new Date().getTime());
-		client = MultiWiiClientFactory.getInstance();
 	}
 	
 	public static Map<String, Object> getReport() {
