@@ -31,7 +31,28 @@ $.settings = Object({
 		    timeout: $.settings.MAX_PING_CONNECTION_TIME_MS
 		});
 	}
+	
+	function gps() {
+		$.ajax({
+		    url: './rest/information/gps',
+		    type: 'get',
+		    dataType: 'json',
+		    error: function(){
+		    	$('#status').show();
+		    	$('#status').html('Cannot contact drone!');
+		    },
+		    success: function(data){
+		    	$('#sat').html(data['satellites']);
+		    	$('#long').html(data['longitude']);
+		        $('#lat').html(data['latitude']);
+		        $('#alt').html(data['altitude']);
+		        $('#speed').html(data['speed']);
+		    }
+		});
+	}
+	
 	setInterval(ping, $.settings.PING_INTERVAL_MS);
+	setInterval(gps, $.settings.PING_INTERVAL_MS);
 	
 	
 	function moveStart(id, posX, posY, isLeft) {
