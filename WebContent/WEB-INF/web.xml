@@ -12,6 +12,11 @@
     </init-param>
     
     <init-param>
+        <param-name>javax.ws.rs.Application</param-name>
+        <param-value>com.jmace.MaceDrone.ws.context.MaceDroneApplication</param-value>
+    </init-param>
+    
+    <init-param>
     	<param-name>com.sun.jersey.config.property.JSPTemplatesBasePath</param-name>
 		<param-value>/WEB-INF/</param-value>
 	</init-param>

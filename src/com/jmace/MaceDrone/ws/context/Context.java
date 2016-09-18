@@ -9,27 +9,29 @@ import javax.servlet.ServletContextListener;
 
 public class Context implements ServletContextListener {
 
-	private Thread statusThread;
-	
-	/*
-	 * Server startup process
-	 */
-	@Override
-	public void contextInitialized(ServletContextEvent event) {
-		try {
-			PlatformManager.setPlatform(Platform.RASPBERRYPI);
-		} catch (PlatformAlreadyAssignedException e) {
-			e.printStackTrace();
-		}
-		this.statusThread = new CheckingService();
-		this.statusThread.start();
-	}
+    private Thread statusThread;
 
-	/*
-	 * Server teardown process
-	 */
-	@Override
-	public void contextDestroyed(ServletContextEvent event) {
-		this.statusThread.interrupt();
-	}
+
+    /*
+     * Server startup process
+     */
+    @Override
+    public void contextInitialized(ServletContextEvent event) {
+        try {
+            PlatformManager.setPlatform(Platform.RASPBERRYPI);
+        } catch (PlatformAlreadyAssignedException e) {
+            e.printStackTrace();
+        }
+        this.statusThread = new CheckingService();
+        this.statusThread.start();
+    }
+
+
+    /*
+     * Server teardown process
+     */
+    @Override
+    public void contextDestroyed(ServletContextEvent event) {
+        this.statusThread.interrupt();
+    }
 }

@@ -45,133 +45,134 @@ import java.util.Map;
 
 public class MultiWiiClient {
 
-	private Serial serial;
-	private BufferedInputStream inStream;
-	
-	
-	//The preamble and direction byte of messages are both defined by the protocol.
-	//Every message must begin with the characters $M, and message going to the MultiWii must have the direction <
-	private static final String OUTGOING_PREAMBLE_WITH_DIRECTION = "$M<";
-	//Every response must begin with the characters $M, and message coming from the MultiWii must have the direction >
-	private static final String INCOMING_PREAMBLE_WITH_DIRECTION = "$M>";
-	
-	
-	public MultiWiiClient(String usbPort) {
-		try {
-			SerialConfig config = new SerialConfig();
-			config.device(usbPort)
-	              .baud(Baud._115200)
-	              .dataBits(DataBits._8)
-	              .parity(Parity.NONE)
-	              .stopBits(StopBits._1)
-	              .flowControl(FlowControl.NONE);
-			
-			this.serial = SerialFactory.createInstance();
-			this.serial.open(config);
-			
-			this.inStream = new BufferedInputStream(this.serial.getInputStream());
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-	public Map<String, Object> sendRequest(MultiWiiRequest request) throws IllegalStateException, IOException {
-		String message = createMessage(request.getId(), false, null);
-		byte[] response = sendMessage(message); 
-		return request.parse(response);
-	}
-	
-	
-	public Map<String, Object> sendCommand(MultiWiiCommand command, String payload) throws IllegalStateException, IOException {
-		String message = createMessage(command.getId(), true, payload);
-		byte[] response = sendMessage(message);
-		return command.parse(response);
-	}
-	
-	/**
-	 * This method creates the message that will be sent to the MultiWii
-	 */
-	private String createMessage(int mutliWiiCommandnumber, boolean isCommand, String payload) {
-		StringBuilder message = new StringBuilder(OUTGOING_PREAMBLE_WITH_DIRECTION);
-		byte checksum=0;
-		
-		int datalength = (payload != null) ? payload.length() : 0;
-		
-		message.append((char) datalength);
-		checksum ^= datalength;
-		
-		message.append((char) mutliWiiCommandnumber);
-		checksum ^= ((int) mutliWiiCommandnumber);
-		
-		if (payload != null) {
-			for (char c : payload.toCharArray()){ 
-				message.append(c);
-				checksum ^= (int) c;
-			}
-		}
-		
-		message.append((char) checksum);
-		return message.toString();
-	}
-	
-	
-	/**
-	 * This method sends the request and receives the response.
-	 */
-	private synchronized byte[] sendMessage(String message) throws IllegalStateException, IOException {
+    private Serial serial;
+    private BufferedInputStream inStream;
+
+
+    //The preamble and direction byte of messages are both defined by the protocol.
+    //Every message must begin with the characters $M, and message going to the MultiWii must have the direction <
+    private static final String OUTGOING_PREAMBLE_WITH_DIRECTION = "$M<";
+    //Every response must begin with the characters $M, and message coming from the MultiWii must have the direction >
+    private static final String INCOMING_PREAMBLE_WITH_DIRECTION = "$M>";
+
+
+    public MultiWiiClient(String usbPort) {
+        try {
+            SerialConfig config = new SerialConfig();
+            config.device(usbPort)
+            .baud(Baud._115200)
+            .dataBits(DataBits._8)
+            .parity(Parity.NONE)
+            .stopBits(StopBits._1)
+            .flowControl(FlowControl.NONE);
+
+            this.serial = SerialFactory.createInstance();
+            this.serial.open(config);
+
+            this.inStream = new BufferedInputStream(this.serial.getInputStream());
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public Map<String, Object> sendRequest(MultiWiiRequest request) throws IllegalStateException, IOException {
+        String message = createMessage(request.getId(), false, null);
+        byte[] response = sendMessage(message); 
+        return request.parse(response);
+    }
+
+
+    public Map<String, Object> sendCommand(MultiWiiCommand command, String payload) throws IllegalStateException, IOException {
+        String message = createMessage(command.getId(), true, payload);
+        byte[] response = sendMessage(message);
+        return command.parse(response);
+    }
+
+
+    /**
+     * This method creates the message that will be sent to the MultiWii
+     */
+    private String createMessage(int mutliWiiCommandnumber, boolean isCommand, String payload) {
+        StringBuilder message = new StringBuilder(OUTGOING_PREAMBLE_WITH_DIRECTION);
+        byte checksum=0;
+
+        int datalength = (payload != null) ? payload.length() : 0;
+
+        message.append((char) datalength);
+        checksum ^= datalength;
+
+        message.append((char) mutliWiiCommandnumber);
+        checksum ^= ((int) mutliWiiCommandnumber);
+
+        if (payload != null) {
+            for (char c : payload.toCharArray()){ 
+                message.append(c);
+                checksum ^= (int) c;
+            }
+        }
+
+        message.append((char) checksum);
+        return message.toString();
+    }
+
+
+    /**
+     * This method sends the request and receives the response.
+     */
+    private synchronized byte[] sendMessage(String message) throws IllegalStateException, IOException {
         //Clear out any old responses or requests that were not handled
-		serial.discardAll();
-		inStream.skip(inStream.available());
-		
-		//Send the request
-		serial.write(message.getBytes());
+        serial.discardAll();
+        inStream.skip(inStream.available());
+
+        //Send the request
+        serial.write(message.getBytes());
         serial.flush();
-        
+
         //Wait for the response to come back
         //(Note that, in the event of an error, inStream.available() == -1 and will skip both loops)
         int count = 0;
         while (inStream.available() == 0) {
-        	//After 1.5 seconds, give up on the response
-        	if (count++ > 150) {
-        		break;
-        	}
-        	try{
-        		Thread.sleep(10);
-        	} catch (Exception e) {}
+            //After 1.5 seconds, give up on the response
+            if (count++ > 150) {
+                break;
+            }
+            try{
+                Thread.sleep(10);
+            } catch (Exception e) {}
         }
-        
+
         //Get the response
         StringBuilder responseHeader = new StringBuilder();
         for (int i = 0; i < 3 && inStream.available() > 0; i++) {
-        	responseHeader.append((char) inStream.read());
+            responseHeader.append((char) inStream.read());
         }
-        
+
         if (!responseHeader.toString().equals(INCOMING_PREAMBLE_WITH_DIRECTION) || inStream.available() <= 1)
         {
-        	System.out.println("Invalid header: " + responseHeader.toString());
-        	return new byte[0];
+            System.out.println("Invalid header: " + responseHeader.toString());
+            return new byte[0];
         }
-        
+
         int length = inStream.read();
         int computedChecksum = length ^ inStream.read(); //command
         byte[] response = new byte[length];
-        
+
         for (int i = 0; i < length && inStream.available() > 0; i++) {
-        	int value =  inStream.read();
-        	response[i] = (byte) value;
-        	computedChecksum ^= value;
+            int value =  inStream.read();
+            response[i] = (byte) value;
+            computedChecksum ^= value;
         }
-        
+
         int checksum = inStream.read();
-        
+
         if (computedChecksum != checksum) {
-        	System.out.println("Invalid checksum");
-        	return new byte[0];
+            System.out.println("Invalid checksum");
+            return new byte[0];
         }
-        
+
         //Return the response
         return response;
-	}
-	
+    }
+
 }
