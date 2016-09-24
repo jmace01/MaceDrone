@@ -85,13 +85,11 @@ html, body, #main, #mainPortrait {
 
 #portraitMenu {
     width: 100%;
-    margin: auto;
     overflow: auto;
-    margin-bottom: 10px;
 }
 
 #portraitMenu div {
-    border: #5555AA 1px solid;
+    border: #DDD 1px solid;
     float: left;
     width: 33.3%;
     margin-left: -1px;
@@ -106,14 +104,33 @@ html, body, #main, #mainPortrait {
 }
 
 #mainPortrait img {
-    width: 100px;
+    width: 50px;
+}
+
+#turnPrompt {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
 }
 
 #sidewaysPhone {
     position: relative;
-    left: -30px;
-    top: 20px;
+    left: -20px;
+    top: 10px;
     transform: rotate(90deg);
+}
+
+#gps p {
+    width: 100%;
+    text-align: right;
+}
+
+#gps span {
+    min-height: 1px;
+    width: 50%;
+    float: right;
+    display: block;
+    text-align: left;
 }
 
 .ring {

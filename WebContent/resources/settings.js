@@ -46,7 +46,12 @@
 		$('#droneSettings_menu').css('background', '');
 		$('#controllerSettings_menu').css('background', '');
 		
-		elem.style.background = '#3333AA';
+		$('#gps_menu').css('color', '');
+		$('#droneSettings_menu').css('color', '');
+		$('#controllerSettings_menu').css('color', '');
+		
+		elem.style.background = '#DDDDDD';
+		elem.style.color = '#333333';
 	}
 	
 })();
