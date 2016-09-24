@@ -127,7 +127,7 @@ html, body, #main, #mainPortrait {
 
 #gps span {
     min-height: 1px;
-    width: 75%;
+    width: 50%;
     float: right;
     display: block;
     text-align: left;
