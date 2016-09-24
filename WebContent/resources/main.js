@@ -57,8 +57,8 @@ $.settings = Object({
 	}
 
 
-	//setInterval(temp, $.settings.TEMP_INTERVAL_MS);
-	//setInterval(gps, $.settings.GPS_INTERVAL_MS);
+	setInterval(temp, $.settings.TEMP_INTERVAL_MS);
+	setInterval(gps, $.settings.GPS_INTERVAL_MS);
 
 
 	function moveStart(id, posX, posY, isLeft) {
