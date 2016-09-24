@@ -1,5 +1,5 @@
 $.settings = Object({
-	TEMP_INTERVAL_MS       : 2000,
+	TEMP_INTERVAL_MS       : 5000,
 	GPS_INTERVAL_MS        : 1000,
 	MAX_CONNECTION_TIME_MS : 750
 });

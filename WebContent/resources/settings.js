@@ -19,6 +19,15 @@
 			}
 		});
 		
+		var html = '';
+		for (var key in $.settings) {
+			//Turn "LABEL_TEXT" into "Label Text"
+			var labelText = key.replace(new RegExp('_', 'g'), ' ').toLowerCase();
+			html += '<p><label for="' + key + '" style="text-transform:capitalize;">' + labelText + '</label> ';
+			html += '<input type="text" id="' + key + '" name="' + key + '" value="' + $.settings[key] + '" /></p>';
+		}
+		$('#controllerSettings').html(html);
+		
 		$('#portraitMenu div').on('touchstart click', function(){
 			openPage(this);
 		});
