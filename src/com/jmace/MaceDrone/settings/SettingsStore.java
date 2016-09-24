@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class SettingsStore {
 
-    public static long STALENESS_TIME_MILLISECONDS = 3000;
+    public static long STALENESS_TIME_MS = 3000;
 
     
     public static Map<String, Object> getProperties() {

@@ -25,7 +25,7 @@ public class StatusService {
         }
 
         Date date = new Date();
-        Timestamp cutOfftime = new Timestamp(date.getTime() - SettingsStore.STALENESS_TIME_MILLISECONDS);
+        Timestamp cutOfftime = new Timestamp(date.getTime() - SettingsStore.STALENESS_TIME_MS);
         return StatusService.lastReport.before(cutOfftime);
     }
 

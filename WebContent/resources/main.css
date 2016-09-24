@@ -84,15 +84,18 @@ html, body, #main, #mainPortrait {
 }
 
 #portraitMenu {
-    width: 315px;
+    width: 100%;
     margin: auto;
     overflow: auto;
+    margin-bottom: 10px;
 }
 
 #portraitMenu div {
     border: #5555AA 1px solid;
     float: left;
-    width: 103px;
+    width: 33.3%;
+    margin-left: -1px;
+    margin-right: -1px;
     text-align: center;
     font-size: .8em;
     line-height: 25px;
