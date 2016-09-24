@@ -50,7 +50,7 @@ $.settings = Object({
 				$('#long').html(data['longitude']);
 				$('#lat').html(data['latitude']);
 				$('#alt').html(data['altitude']);
-				$('#speed').html(Math.round(parseFloat(data['speed']) * 1000) / 1000);
+				$('#speed').html(Math.round(parseFloat(data['speed']) * 1000000) / 1000000);
 			},
 			timeout: $.settings.MAX_CONNECTION_TIME_MS
 		});
