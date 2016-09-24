@@ -12,10 +12,10 @@ $.settings = Object({
 
 	var _draggingLeft  = false;
 	var _draggingRight = false;
-	var _startX1         = 0;
-	var _startY1         = 0;
-	var _startX2         = 0;
-	var _startY2         = 0;
+	var _startX1       = 0;
+	var _startY1       = 0;
+	var _startX2       = 0;
+	var _startY2       = 0;
 
 
 	function temp() {
@@ -98,10 +98,10 @@ $.settings = Object({
 	function moveEnd(isLeft) {
 		if (isLeft) {
 			_draggingLeft  = false;
-			var ring         = '#leftRing';
+			var ring       = '#leftRing';
 		} else {
 			_draggingRight = false;
-			var ring         = '#rightRing';
+			var ring       = '#rightRing';
 		}
 		$(ring).hide();
 	}
