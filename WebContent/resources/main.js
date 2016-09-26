@@ -108,10 +108,6 @@ $.settings = Object({
 
 
 	$(document).on('touchstart', 'body', function(event) {
-		if (event.target.id != 'controlsLeft' && event.target.id != 'controlsRight') {
-			return;
-		}
-		
 		event.preventDefault();
 
 		var touch = event.changedTouches[0];
@@ -123,10 +119,6 @@ $.settings = Object({
 
 
 	$(document).on('touchmove', 'body', function(event) {
-		if (event.target.id != 'controlsLeft' && event.target.id != 'controlsRight') {
-			return;
-		}
-		
 		event.preventDefault();
 
 		var touches = event.changedTouches;
@@ -143,10 +135,6 @@ $.settings = Object({
 
 
 	$(document).on('touchend', 'body', function(event) {
-		if (event.target.id != 'controlsLeft' && event.target.id != 'controlsRight') {
-			return;
-		}
-		
 		event.preventDefault();
 
 		var touch = event.changedTouches[0];
