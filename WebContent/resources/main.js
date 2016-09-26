@@ -107,7 +107,7 @@ $.settings = Object({
 	}
 
 
-	$(document).on('touchstart', 'body', function(event) {
+	$(document).on('touchstart', '#main', function(event) {
 		event.preventDefault();
 
 		var touch = event.changedTouches[0];
@@ -118,7 +118,7 @@ $.settings = Object({
 	});
 
 
-	$(document).on('touchmove', 'body', function(event) {
+	$(document).on('touchmove', '#main', function(event) {
 		event.preventDefault();
 
 		var touches = event.changedTouches;
@@ -134,7 +134,7 @@ $.settings = Object({
 	});
 
 
-	$(document).on('touchend', 'body', function(event) {
+	$(document).on('touchend', '#main', function(event) {
 		event.preventDefault();
 
 		var touch = event.changedTouches[0];
