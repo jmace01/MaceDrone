@@ -5,6 +5,45 @@ $.settings = Object({
 });
 
 
+function temp() {
+	$.ajax({
+		url: './rest/information/temperature',
+		type: 'get',
+		dataType: 'json',
+		error: function(){
+			$('#status').show();
+			$('#status').html('Cannot contact drone!');
+		},
+		success: function(data){
+			$('#status').hide();
+			$('#temp').html('Temp: '+data['temp']);
+		},
+		timeout: $.settings.MAX_CONNECTION_TIME_MS
+	});
+}
+
+
+function gps() {
+	$.ajax({
+		url: './rest/information/gps',
+		type: 'get',
+		dataType: 'json',
+		error: function(){
+			$('#status').show();
+			$('#status').html('Cannot contact drone!');
+		},
+		success: function(data){
+			$('#sat').html(data['satellites']);
+			$('#long').html(data['longitude']);
+			$('#lat').html(data['latitude']);
+			$('#alt').html(data['altitude']);
+			$('#speed').html(Math.round(parseFloat(data['speed']) * 1000000) / 1000000);
+		},
+		timeout: $.settings.MAX_CONNECTION_TIME_MS
+	});
+}
+
+
 (function() {
 
 	'use strict';
@@ -16,49 +55,6 @@ $.settings = Object({
 	var _startY1       = 0;
 	var _startX2       = 0;
 	var _startY2       = 0;
-
-
-	function temp() {
-		$.ajax({
-			url: './rest/information/temperature',
-			type: 'get',
-			dataType: 'json',
-			error: function(){
-				$('#status').show();
-				$('#status').html('Cannot contact drone!');
-			},
-			success: function(data){
-				$('#status').hide();
-				$('#temp').html('Temp: '+data['temp']);
-			},
-			timeout: $.settings.MAX_CONNECTION_TIME_MS
-		});
-	}
-
-
-	function gps() {
-		$.ajax({
-			url: './rest/information/gps',
-			type: 'get',
-			dataType: 'json',
-			error: function(){
-				$('#status').show();
-				$('#status').html('Cannot contact drone!');
-			},
-			success: function(data){
-				$('#sat').html(data['satellites']);
-				$('#long').html(data['longitude']);
-				$('#lat').html(data['latitude']);
-				$('#alt').html(data['altitude']);
-				$('#speed').html(Math.round(parseFloat(data['speed']) * 1000000) / 1000000);
-			},
-			timeout: $.settings.MAX_CONNECTION_TIME_MS
-		});
-	}
-
-
-	setInterval(temp, $.settings.TEMP_INTERVAL_MS);
-	setInterval(gps, $.settings.GPS_INTERVAL_MS);
 
 
 	function moveStart(id, posX, posY, isLeft) {

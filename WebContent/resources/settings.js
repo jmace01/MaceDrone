@@ -13,7 +13,7 @@
 					//Turn "LABEL_TEXT" into "Label Text"
 					var labelText = key.replace(new RegExp('_', 'g'), ' ').toLowerCase();
 					html += '<p><label for="' + key + '" style="text-transform:capitalize;">' + labelText + '</label> ';
-					html += '<input type="text" id="' + key + '" name="' + key + '" value="' + data[key] + '" /></p>';
+					html += '<input type="text" id="' + key + '" onblur="changeDroneSetting(this)" value="' + data[key] + '" /></p>';
 				}
 				$('#droneSettings').html(html);
 			}
@@ -24,7 +24,7 @@
 			//Turn "LABEL_TEXT" into "Label Text"
 			var labelText = key.replace(new RegExp('_', 'g'), ' ').toLowerCase();
 			html += '<p><label for="' + key + '" style="text-transform:capitalize;">' + labelText + '</label> ';
-			html += '<input type="text" id="' + key + '" name="' + key + '" value="' + $.settings[key] + '" /></p>';
+			html += '<input type="text" id="' + key + '" value="' + $.settings[key] + '" onblur="changeControllerSetting(this)" /></p>';
 		}
 		$('#controllerSettings').html(html);
 		
@@ -33,6 +33,7 @@
 		});
 		
 		openPage(document.getElementById("gps_menu"));
+		resetSettings();
 	});
 	
 	
@@ -64,3 +65,25 @@
 	}
 	
 })();
+
+
+var _temp_interval = null;
+var _gps_interval = null;
+function resetSettings() {
+	if (_temp_interval)
+		clearInterval(_temp_interval);
+	if (_gps_interval)
+		clearInterval(_gps_interval);
+	_temp_interval = setInterval(temp, $.settings.TEMP_INTERVAL_MS);
+	_gps_interval = setInterval(gps, $.settings.GPS_INTERVAL_MS);
+}
+
+function changeDroneSetting(elem) {
+	//
+}
+
+
+function changeControllerSetting(elem) {
+	$.settings[elem.id] = elem.value;
+	resetSettings();
+}
