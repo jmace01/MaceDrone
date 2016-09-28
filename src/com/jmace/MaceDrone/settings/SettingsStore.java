@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class SettingsStore {
 
-    public static long STALENESS_TIME_MS = 3000;
+    public static Long STALENESS_TIME_MS = 3000l;
 
     
     public static Map<String, Object> getProperties() {
@@ -23,7 +23,22 @@ public class SettingsStore {
     }
     
     
-    public static boolean setProperty(String name, Object value) {
+    public static Object getProperty(String name) {
+        Field[] fields = SettingsStore.class.getDeclaredFields();
+        
+        try {
+            for (Field field : fields) {
+                if (field.getName().equals(name)) {
+                    return field.get(null);
+                }
+            }
+        } catch (Exception e) {}
+        
+        return "";
+    }
+    
+    
+    public static boolean setProperty(String name, String value) {
         try {
             Field toSet = null;
             for (Field field : SettingsStore.class.getDeclaredFields()) {
@@ -35,11 +50,21 @@ public class SettingsStore {
             if (toSet == null) {
                 return false;
             } else {
-                toSet.set(SettingsStore.class, toSet.getType().cast(value));
+                setValue(toSet, value);
                 return true;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
+        }
+    }
+
+
+    private static void setValue(Field toSet, String value) throws IllegalArgumentException, IllegalAccessException {
+        if (toSet.getType().isAssignableFrom(Long.class)) {
+            toSet.set(SettingsStore.class, Long.parseLong(value));
+        } else {
+            toSet.set(SettingsStore.class, value);
         }
     }
 

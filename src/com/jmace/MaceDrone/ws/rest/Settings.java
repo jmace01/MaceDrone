@@ -25,9 +25,9 @@ public class Settings {
     @POST
     public Response setStalenessTime(@FormParam("name") String name, @FormParam("value") String value) {
         if (SettingsStore.setProperty(name, value)) {
-            return Response.ok().build();
+            return Response.ok(SettingsStore.getProperty(name)).build();
         } else {
-            return Response.notModified().build();
+            return Response.notModified(SettingsStore.getProperty(name).toString()).build();
         }
     }
 

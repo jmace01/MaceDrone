@@ -16,7 +16,7 @@ public class CheckingService extends Thread {
     public void run() {
         try {
             while (true) {
-                Thread.sleep(SettingsStore.STALENESS_TIME_MILLISECONDS);
+                Thread.sleep(SettingsStore.STALENESS_TIME_MS);
                 if (StatusService.reportIsStale()) {
                     controller.killMotors();
                 } else {

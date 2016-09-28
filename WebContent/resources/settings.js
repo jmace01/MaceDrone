@@ -79,7 +79,16 @@ function resetSettings() {
 }
 
 function changeDroneSetting(elem) {
-	//
+	$.ajax({
+		url: './rest/settings/value',
+		type: 'post',
+		dataType: 'json',
+		data: { name: elem.id, value: elem.value },
+		success: function(data){
+			elem.value = data;
+		},
+		timeout: $.settings.MAX_CONNECTION_TIME_MS
+	});
 }
 
 
