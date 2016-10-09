@@ -1,7 +1,20 @@
+/**************************************************************************************************
+ * 
+ *                                          MACEDRONE
+ *                                github.com/jmace01/MaceDrone/
+ * 
+ * This software was written by Jason Mace for the Mace Drone project. This file may be modified
+ * and used in accordance with the MIT License.
+ * 
+ * Copyright (c) 2016 by Jason Mace.
+ * 
+ **************************************************************************************************/
+
 package com.jmace.MaceDrone.services;
 
 import com.jmace.MaceDrone.controller.DroneController;
 import com.jmace.MaceDrone.settings.SettingsStore;
+
 
 public class CheckingService extends Thread {
 
@@ -23,7 +36,7 @@ public class CheckingService extends Thread {
                     controller.wakeMotors();
                 }
             }
-        } catch (InterruptedException ex) {}
+        } catch (Exception ex) {}
     }
 
 }

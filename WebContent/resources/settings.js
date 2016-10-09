@@ -78,6 +78,7 @@ function resetSettings() {
 	_gps_interval = setInterval(gps, $.settings.GPS_INTERVAL_MS);
 }
 
+
 function changeDroneSetting(elem) {
 	$.ajax({
 		url: './rest/settings/value',
