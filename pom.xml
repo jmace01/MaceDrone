@@ -20,6 +20,7 @@
   <build>
     
     <sourceDirectory>src</sourceDirectory>
+    <finalName>MaceDrone</finalName>
     
     <plugins>
       
